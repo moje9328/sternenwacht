@@ -118,6 +118,8 @@
   .zone .teil small { display: block; margin-top: 4px; font: 7px/1 var(--retro); text-align: center; }
   .zone .teil.an { color: #ffffff; background: rgba(34, 230, 255, 0.22); }
   .zone .teil.feuer { color: rgba(255, 247, 168, 0.95); }
+  .zone .teil.dreh { flex: 0 0 27%; }
+  .zone .teil.dreh svg { width: 26px; height: 26px; }
   .zone .teil.feuer.an { background: rgba(255, 240, 120, 0.2); }
 
   /* Fenster für Start, Pause und Ende */
@@ -294,7 +296,9 @@
       <span class="teil" data-teil="rechts"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><small>RECHTS</small></span></span>
     </div>
     <div class="zone" id="zoneRechts">
+      <span class="teil dreh" data-teil="drehLinks"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 17a8 8 0 0 0-12-9"/><path d="M5 3.5v5h5"/></svg><small>DREH</small></span></span>
       <span class="teil feuer" data-teil="feuer"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg><small>FEUER</small></span></span>
+      <span class="teil dreh" data-teil="drehRechts"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17a8 8 0 0 1 12-9"/><path d="M19 3.5v5h-5"/></svg><small>DREH</small></span></span>
     </div>
   </div>
 </div>
@@ -308,7 +312,7 @@
         <h1>BROCKEN&shy;JÄGER</h1>
         <canvas id="startBild" width="336" height="256" aria-hidden="true"></canvas>
       </div>
-      <p class="unterzeile">Felsbrocken fallen von oben. Weich aus und schieß sie klein.</p>
+      <p class="unterzeile">Meteoriten und Aliens von oben. Weich aus, ziel und schieß zurück.</p>
       <div id="duell" hidden><strong id="duellTitel"></strong><span id="duellText"></span></div>
       <div class="stufen" role="group" aria-label="Schwierigkeit"></div>
       <p class="klein js-stufentext"></p>
@@ -338,16 +342,18 @@
       <h2>SO GEHT'S</h2>
       <ul class="regeln">
         <li><strong id="hilfeSteuerung"></strong></li>
-        <li>Dein türkises Dreieck fährt unten auf der Leiste. Von oben fallen Felsbrocken.</li>
-        <li>Weich aus oder schieß sie kaputt. Trifft dich ein Brocken, verlierst du ein Leben.</li>
-        <li>Große Brocken zerfallen in zwei mittlere, mittlere in zwei kleine. Kleine verschwinden ganz.</li>
-        <li>Mit jeder Welle fallen mehr Brocken, und sie werden schneller.</li>
+        <li>Dein Raumschiff fährt unten auf der Leiste und feuert aus zwei Geschützen. Neig es, um auch Meteoriten neben dir zu treffen.</li>
+        <li>Große Meteoriten zerfallen in zwei mittlere, mittlere in zwei kleine. Kleine verschwinden ganz.</li>
+        <li>Ab Welle 2 schweben grüne Alien-Späher herunter. Ab Welle 3 kommen rote Alien-Schützen, die oben bleiben und auf dich schießen. Sie halten mehrere Treffer aus.</li>
+        <li>Trifft dich ein Meteorit, ein Alien oder ein roter Schuss, verlierst du ein Leben.</li>
         <li>Alle 10.000 Punkte bekommst du ein Leben dazu.</li>
       </ul>
       <div class="punkteTabelle">
-        <span>Großer Brocken</span><b>20</b>
-        <span>Mittlerer Brocken</span><b>50</b>
-        <span>Kleiner Brocken</span><b>100</b>
+        <span>Großer Meteorit</span><b>20</b>
+        <span>Mittlerer Meteorit</span><b>50</b>
+        <span>Kleiner Meteorit</span><b>100</b>
+        <span>Alien-Späher</span><b>150</b>
+        <span>Alien-Schütze</span><b>400</b>
       </div>
       <div class="knoepfe"><button class="btn" type="button" data-oeffne="fStart">Zurück</button></div>
     </section>
@@ -369,7 +375,8 @@
       <dl class="zahlen">
         <div><dt>Punkte</dt><dd id="ePunkte"></dd></div>
         <div><dt>Welle</dt><dd id="eWelle"></dd></div>
-        <div><dt>Brocken zerlegt</dt><dd id="eBrocken"></dd></div>
+        <div><dt>Meteoriten zerlegt</dt><dd id="eBrocken"></dd></div>
+        <div><dt>Aliens erledigt</dt><dd id="eAliens"></dd></div>
         <div><dt>Dein Rekord</dt><dd id="eRekord"></dd></div>
       </dl>
       <p class="klein" id="eDuell" hidden></p>
@@ -416,25 +423,34 @@ const TAU = Math.PI * 2;
 const KURZE_SEITE = 480;
 let W = 480, H = 800;
 
-const SCHIFF_R = 12;           // Wie groß das Schiff für Treffer ist
+const SCHIFF_R = 17;           // Wie groß das Schiff für Treffer ist
 const SCHIFF_TEMPO = 340;      // So schnell fährt das Schiff nach links und rechts
-const ABSTAND_UNTEN = 34;      // So weit über dem unteren Rand fährt das Schiff
+const ABSTAND_UNTEN = 52;      // So weit über dem unteren Rand fährt das Schiff
+const DREH_TEMPO = 2.6;        // So schnell neigt sich das Schiff zum Zielen
+const MAX_WINKEL = 1.05;       // Am weitesten geneigt: etwa 60 Grad
 const KUGEL_TEMPO = 720;
 const DAUERFEUER = 0.2;        // Abstand der Schüsse beim Gedrückthalten
 const NEUES_LEBEN = 10000;
+const GESCHUETZE = [-15, 15];  // (wird beim Zeichnen um 1.15 vergrößert)
+const SCHIFF_GROESSE = 1.15;  // Wo die beiden Geschütze an den Flügeln sitzen
 
-// Groß, mittel, klein: Radius, Fallgeschwindigkeit, Punkte, Farbe
+// Groß, mittel, klein: Radius, Fallgeschwindigkeit, Punkte
 const BROCKEN = {
-  3: { r: 40, v: [55, 80], punkte: 20, farbe: '#b45cff' },
-  2: { r: 22, v: [70, 100], punkte: 50, farbe: '#ff2bd6' },
-  1: { r: 12, v: [85, 120], punkte: 100, farbe: '#ff8a3d' }
+  3: { r: 40, v: [55, 80], punkte: 20 },
+  2: { r: 22, v: [70, 100], punkte: 50 },
+  1: { r: 12, v: [85, 120], punkte: 100 }
 };
-const F = { schiff: '#22e6ff', kugel: '#c9fbff', weiss: '#ffffff' };
+// Späher schweben nur herunter, Schützen bleiben oben und schießen auf dich
+const ALIENS = {
+  spaeher: { r: 24, leben: 1, punkte: 150 },
+  schuetze: { r: 30, leben: 3, punkte: 400 }
+};
+const F = { schiff: '#22e6ff', kugel: '#c9fbff', weiss: '#ffffff', glut: '#ff9a3d', alien: '#7dff4a', plasma: '#ff3355', punkte: '#ffc27a' };
 
 const STUFEN = {
-  leicht: { name: 'Leicht', leben: 5, tempo: 0.72, schutz: 3, kugeln: 6, mehr: 0, text: '5 Leben, die Brocken fallen langsamer und du kannst mehr auf einmal schießen.' },
-  normal: { name: 'Normal', leben: 3, tempo: 1, schutz: 2, kugeln: 4, mehr: 0, text: '3 Leben und höchstens 4 Schüsse gleichzeitig.' },
-  schwer: { name: 'Schwer', leben: 3, tempo: 1.3, schutz: 1.5, kugeln: 4, mehr: 3, text: 'Mehr Brocken, und sie fallen schneller.' }
+  leicht: { name: 'Leicht', leben: 5, tempo: 0.72, schutz: 3, kugeln: 5, mehr: 0, alienSchuss: 2.6, zielFehler: 0.35, alienLeben: 2, text: '5 Leben, alles fällt langsamer, und die Aliens schießen selten.' },
+  normal: { name: 'Normal', leben: 3, tempo: 1, schutz: 2, kugeln: 3, mehr: 0, alienSchuss: 1.8, zielFehler: 0.18, alienLeben: 3, text: '3 Leben, Meteoriten und Aliens im normalen Tempo.' },
+  schwer: { name: 'Schwer', leben: 3, tempo: 1.3, schutz: 1.5, kugeln: 3, mehr: 3, alienSchuss: 1.2, zielFehler: 0.08, alienLeben: 4, text: 'Mehr Meteoriten, alles ist schneller, und die Aliens zielen genau.' }
 };
 const STUFEN_NAMEN = Object.keys(STUFEN);
 
@@ -505,6 +521,10 @@ const ton = {
     quelle.stop(jetzt + dauer + 0.05);
   },
   schuss() { this.piep(1500, 0.09, 0.035, 'square', 0, 320); },
+  alienSchuss() { this.piep(520, 0.18, 0.04, 'sawtooth', 0, 1400); },
+  alienDa() { [300, 450, 300, 450].forEach((f, i) => this.piep(f, 0.1, 0.03, 'sine', i * 0.1)); },
+  alienTreffer() { this.piep(900, 0.06, 0.04, 'square', 0, 600); },
+  alienWeg() { this.knall(0.5, 0.25, 2400); [880, 660, 440].forEach((f, i) => this.piep(f, 0.1, 0.04, 'square', i * 0.06)); },
   brocken(g) { this.knall(0.18 + g * 0.12, 0.16 + g * 0.06, 2600 - g * 600); },
   treffer() { this.knall(0.9, 0.32, 1800); this.piep(160, 0.6, 0.07, 'sawtooth', 0, 40); },
   leben() { [784, 988, 1175, 1568].forEach((f, i) => this.piep(f, 0.12, 0.05, 'square', i * 0.07)); },
@@ -516,15 +536,15 @@ const ton = {
 // --------------------------- Spielzustand ---------------------------
 
 let s = null;
-const eingabe = { links: false, rechts: false, feuer: false };
+const eingabe = { links: false, rechts: false, feuer: false, drehLinks: false, drehRechts: false };
 
 function neuesSpiel() {
   const st = STUFEN[daten.stufe];
   s = {
-    phase: 'lauf', punkte: 0, leben: st.leben, welle: 0, abgeschossen: 0, naechstesLeben: NEUES_LEBEN,
-    schiff: { x: W / 2, vx: 0, schutz: st.schutz, sichtbar: true },
-    brocken: [], kugeln: [], teilchen: [], truemmer: [], schrift: [],
-    nochZuFallen: 0, fallUhr: 0, wellePause: -1,
+    phase: 'lauf', punkte: 0, leben: st.leben, welle: 0, abgeschossen: 0, aliensWeg: 0, naechstesLeben: NEUES_LEBEN,
+    schiff: { x: W / 2, vx: 0, a: 0, schutz: st.schutz, sichtbar: true, muendung: 0 },
+    brocken: [], kugeln: [], aliens: [], plasma: [], teilchen: [], truemmer: [], schrift: [],
+    nochZuFallen: 0, fallUhr: 0, wellePause: -1, alienUhr: 9,
     autoUhr: 0, schussWunsch: false,
     banner: '', bannerUhr: 0, wackeln: 0, endeUhr: 0, endeGezeigt: false, neuerRekord: false, ueberholt: false
   };
@@ -532,25 +552,34 @@ function neuesSpiel() {
 }
 
 const schiffY = () => H - ABSTAND_UNTEN;
-const wellenTempo = () => STUFEN[daten.stufe].tempo * (1 + Math.min(0.8, (s.welle - 1) * 0.07));
+const wellenTempo = () => STUFEN[daten.stufe].tempo * (1 + Math.min(1, (s.welle - 1) * 0.09));
 
 function neuerBrocken(x, y, g, vx, vy) {
   const art = BROCKEN[g];
-  // Unregelmäßige Kanten, damit jeder Brocken anders aussieht
-  const ecken = 9 + Math.floor(Math.random() * 4);
-  const form = new Path2D();
+  // Zerklüftete Kanten: große Buckel und kleine Zacken, damit jeder Meteorit anders aussieht
+  const ecken = 16 + Math.floor(Math.random() * 6);
+  const p1 = Math.random() * TAU, p2 = Math.random() * TAU;
+  const ecke = [];
   for (let i = 0; i < ecken; i++) {
-    const winkel = (i / ecken) * TAU + zufall(-0.18, 0.18);
-    const r = art.r * zufall(0.72, 1.08);
-    if (i) form.lineTo(Math.cos(winkel) * r, Math.sin(winkel) * r);
-    else form.moveTo(Math.cos(winkel) * r, Math.sin(winkel) * r);
+    const w = (i / ecken) * TAU;
+    const f = 0.86 + 0.1 * Math.sin(w * 2 + p1) + 0.06 * Math.sin(w * 3 + p2) + zufall(-0.06, 0.06);
+    ecke.push([Math.cos(w) * art.r * f, Math.sin(w) * art.r * f]);
   }
-  form.closePath();
+  // Krater an zufälligen Stellen
+  const krater = [];
+  const anzahl = g === 3 ? 4 + Math.floor(Math.random() * 3) : g === 2 ? 2 + Math.floor(Math.random() * 2) : 1;
+  for (let i = 0; i < anzahl; i++) {
+    const w = Math.random() * TAU, d = Math.random() * art.r * 0.55;
+    krater.push({ x: Math.cos(w) * d, y: Math.sin(w) * d, r: art.r * zufall(0.1, 0.24) });
+  }
+  // Etwas grauer oder etwas brauner Stein
+  const farbton = Math.random();
   return {
     x, y, g, r: art.r,
     vx: vx === undefined ? zufall(-30, 30) : vx,
     vy: vy === undefined ? zufall(art.v[0], art.v[1]) * wellenTempo() : vy,
-    a: Math.random() * TAU, va: zufall(-1.2, 1.2) * (4 - g) * 0.5, form
+    a: Math.random() * TAU, va: zufall(-0.8, 0.8) * (4 - g) * 0.4,
+    ecke, krater, farbton, bild: null, bildMass: 0
   };
 }
 
@@ -578,12 +607,95 @@ function lassFallen() {
 
 // --------------------------- Aktionen ---------------------------
 
+// Beide Geschütze feuern gleichzeitig in die Richtung, in die das Schiff zeigt
 function schiesse() {
   const sch = s.schiff;
-  if (!sch.sichtbar || s.kugeln.length >= STUFEN[daten.stufe].kugeln) return false;
-  s.kugeln.push({ x: sch.x, y: schiffY() - 16 });
+  if (!sch.sichtbar || s.kugeln.length >= STUFEN[daten.stufe].kugeln * 2) return false;
+  const sx = Math.sin(sch.a), cy = Math.cos(sch.a);
+  for (const gx of GESCHUETZE) {
+    // Spitze des Geschützes, mit dem Schiff gedreht
+    const lx = gx * SCHIFF_GROESSE, ly = -14 * SCHIFF_GROESSE;
+    s.kugeln.push({
+      x: sch.x + lx * cy - ly * sx, y: schiffY() + lx * sx + ly * cy,
+      vx: sx * KUGEL_TEMPO, vy: -cy * KUGEL_TEMPO
+    });
+  }
+  sch.muendung = 0.07;
   ton.schuss();
   return true;
+}
+
+// --------------------------- Aliens ---------------------------
+
+function neuesAlien(art) {
+  const st = STUFEN[daten.stufe];
+  const x = zufall(60, W - 60);
+  if (art === 'spaeher') {
+    return { art, x, y: -30, r: ALIENS.spaeher.r, leben: 1, vy: zufall(55, 75) * wellenTempo(), wackel: Math.random() * TAU, blitz: 0, uhr: 0 };
+  }
+  return {
+    art, x, y: -40, r: ALIENS.schuetze.r, leben: st.alienLeben, hoehe: zufall(H * 0.12, H * 0.28),
+    vx: (Math.random() < 0.5 ? -1 : 1) * zufall(60, 90), vy: 90, schussUhr: 1.4, blitz: 0, uhr: 0
+  };
+}
+
+function rechneAliens(dt) {
+  const st = STUFEN[daten.stufe];
+  // Ab Welle 2 kommen Späher, ab Welle 3 auch Schützen
+  if (s.phase === 'lauf' && s.welle >= 2 && s.wellePause < 0) {
+    s.alienUhr -= dt;
+    if (s.alienUhr <= 0) {
+      const schuetzen = s.aliens.filter(a => a.art === 'schuetze').length;
+      const art = s.welle >= 3 && schuetzen < (s.welle >= 6 ? 2 : 1) && Math.random() < 0.55 ? 'schuetze' : 'spaeher';
+      s.aliens.push(neuesAlien(art));
+      ton.alienDa();
+      s.alienUhr = zufall(6, 11) / Math.min(1.6, 1 + (s.welle - 2) * 0.08);
+    }
+  }
+  const y = schiffY();
+  for (let i = s.aliens.length - 1; i >= 0; i--) {
+    const a = s.aliens[i];
+    a.uhr += dt;
+    if (a.blitz > 0) a.blitz -= dt;
+    if (a.art === 'spaeher') {
+      // Schwebt in Schlangenlinien herunter
+      a.y += a.vy * dt;
+      a.x = begrenzt(a.x + Math.cos(a.uhr * 2.2 + a.wackel) * 80 * dt, a.r, W - a.r);
+    } else {
+      // Fliegt herein, bleibt oben und fährt hin und her. Nach einer Weile kommt er langsam tiefer.
+      if (a.y < a.hoehe) a.y = Math.min(a.hoehe, a.y + a.vy * dt);
+      else if (a.uhr > 14) a.y += 22 * dt;
+      a.x += a.vx * dt;
+      if (a.x < a.r + 10) { a.x = a.r + 10; a.vx = Math.abs(a.vx); }
+      if (a.x > W - a.r - 10) { a.x = W - a.r - 10; a.vx = -Math.abs(a.vx); }
+      a.schussUhr -= dt;
+      if (a.schussUhr <= 0 && s.phase === 'lauf' && a.y >= a.hoehe - 1) {
+        a.schussUhr = st.alienSchuss * zufall(0.8, 1.2);
+        const w = Math.atan2(y - a.y, s.schiff.x - a.x) + zufall(-1, 1) * st.zielFehler;
+        const v = 230 * Math.min(1.3, wellenTempo());
+        s.plasma.push({ x: a.x, y: a.y + 14, vx: Math.cos(w) * v, vy: Math.sin(w) * v });
+        ton.alienSchuss();
+      }
+    }
+    if (a.y > H + a.r) s.aliens.splice(i, 1);
+  }
+  for (let i = s.plasma.length - 1; i >= 0; i--) {
+    const p = s.plasma[i];
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.y > H + 10 || p.x < -10 || p.x > W + 10) s.plasma.splice(i, 1);
+  }
+}
+
+function alienGetroffen(i) {
+  const a = s.aliens[i];
+  a.leben--;
+  a.blitz = 0.1;
+  if (a.leben > 0) { ton.alienTreffer(); return; }
+  s.aliens.splice(i, 1);
+  s.aliensWeg++;
+  funken(a.x, a.y, [F.alien, F.weiss, '#b9ff9e', F.plasma], 30, 180);
+  ton.alienWeg();
+  punkteDazu(ALIENS[a.art].punkte, a.x, a.y, F.alien);
 }
 
 function punkteDazu(n, x, y, farbe) {
@@ -615,11 +727,16 @@ function zerlege(i, mitPunkten) {
   const b = s.brocken[i];
   s.brocken.splice(i, 1);
   const art = BROCKEN[b.g];
-  funken(b.x, b.y, [art.farbe, F.weiss], 6 + b.g * 5, 70 + b.g * 30);
+  // Staub, Glut und ein paar Gesteinssplitter
+  funken(b.x, b.y, ['#a08670', '#6b5a4b', F.glut, '#ffe2a8'], 8 + b.g * 6, 70 + b.g * 30);
+  for (let k = 0; k < b.g * 2 + 1; k++) {
+    const w = Math.random() * TAU, v = zufall(40, 120);
+    s.truemmer.push({ x: b.x, y: b.y, vx: Math.cos(w) * v + b.vx * 0.5, vy: Math.sin(w) * v + b.vy * 0.5, a: Math.random() * TAU, va: zufall(-6, 6), laenge: zufall(3, 4 + b.g * 2), t: zufall(0.5, 0.9), stein: true });
+  }
   ton.brocken(b.g);
   if (mitPunkten) {
     s.abgeschossen++;
-    punkteDazu(art.punkte, b.x, b.y, art.farbe);
+    punkteDazu(art.punkte, b.x, b.y, F.punkte);
   }
   if (b.g > 1) {
     const fall = Math.max(b.vy, BROCKEN[b.g - 1].v[0] * wellenTempo());
@@ -683,6 +800,9 @@ function rechne(dt) {
     sch.vx += (ziel - sch.vx) * Math.min(1, dt * 16);
     sch.x = begrenzt(sch.x + sch.vx * dt, 18, W - 18);
     if (sch.x <= 18 || sch.x >= W - 18) sch.vx = 0;
+    // Zum Zielen neigen. Die Neigung bleibt, bis du zurückdrehst.
+    sch.a = begrenzt(sch.a + ((eingabe.drehRechts ? 1 : 0) - (eingabe.drehLinks ? 1 : 0)) * DREH_TEMPO * dt, -MAX_WINKEL, MAX_WINKEL);
+    if (sch.muendung > 0) sch.muendung -= dt;
     if (sch.schutz > 0) sch.schutz -= dt;
     s.autoUhr -= dt;
     if (s.schussWunsch || (eingabe.feuer && s.autoUhr <= 0)) {
@@ -711,13 +831,14 @@ function rechne(dt) {
     if (b.y > H + b.r) s.brocken.splice(i, 1);
   }
 
-  // Schüsse fliegen gerade nach oben
+  // Schüsse fliegen in die Richtung, in die das Schiff beim Abfeuern zeigte
   for (let i = s.kugeln.length - 1; i >= 0; i--) {
     const k = s.kugeln[i];
-    k.y -= KUGEL_TEMPO * dt;
-    if (k.y < -10) s.kugeln.splice(i, 1);
+    k.x += k.vx * dt; k.y += k.vy * dt;
+    if (k.y < -10 || k.x < -10 || k.x > W + 10) s.kugeln.splice(i, 1);
   }
 
+  rechneAliens(dt);
   treffer();
 
   if (s.phase === 'lauf') {
@@ -739,26 +860,33 @@ function rechne(dt) {
 function treffer() {
   for (let i = s.kugeln.length - 1; i >= 0; i--) {
     const k = s.kugeln[i];
+    let weg = false;
     for (let j = s.brocken.length - 1; j >= 0; j--) {
       const b = s.brocken[j];
-      if (Math.hypot(k.x - b.x, k.y - b.y) < b.r * 0.95 + 3) {
-        zerlege(j, true);
-        s.kugeln.splice(i, 1);
-        break;
+      if (Math.hypot(k.x - b.x, k.y - b.y) < b.r * 0.92 + 3) { zerlege(j, true); weg = true; break; }
+    }
+    if (!weg) {
+      for (let j = s.aliens.length - 1; j >= 0; j--) {
+        const a = s.aliens[j];
+        if (Math.abs(k.x - a.x) < a.r + 2 && Math.abs(k.y - a.y) < a.r * 0.65 + 2) { alienGetroffen(j); weg = true; break; }
       }
     }
+    if (weg) s.kugeln.splice(i, 1);
   }
   const sch = s.schiff;
-  if (s.phase === 'lauf' && sch.schutz <= 0) {
-    const y = schiffY();
-    for (let j = s.brocken.length - 1; j >= 0; j--) {
-      const b = s.brocken[j];
-      if (Math.hypot(sch.x - b.x, y - b.y) < SCHIFF_R + b.r * 0.85) {
-        zerlege(j, false);
-        getroffen();
-        break;
-      }
-    }
+  if (s.phase !== 'lauf' || sch.schutz > 0) return;
+  const y = schiffY();
+  for (let j = s.brocken.length - 1; j >= 0; j--) {
+    const b = s.brocken[j];
+    if (Math.hypot(sch.x - b.x, y - b.y) < SCHIFF_R + b.r * 0.85) { zerlege(j, false); getroffen(); return; }
+  }
+  for (let j = s.aliens.length - 1; j >= 0; j--) {
+    const a = s.aliens[j];
+    if (Math.hypot(sch.x - a.x, y - a.y) < SCHIFF_R + a.r * 0.8) { a.leben = 1; alienGetroffen(j); getroffen(); return; }
+  }
+  for (let j = s.plasma.length - 1; j >= 0; j--) {
+    const p = s.plasma[j];
+    if (Math.hypot(sch.x - p.x, y - p.y) < SCHIFF_R - 2) { s.plasma.splice(j, 1); getroffen(); return; }
   }
 }
 
@@ -779,7 +907,7 @@ function merkeRekord() {
   speichere();
 }
 
-const SPRUECHE = ['Der Brocken war härter als dein Schiff.', 'Ein Brocken zu viel.', 'Die Brocken waren diesmal schneller.', 'Von oben kam einfach zu viel.'];
+const SPRUECHE = ['Der Meteorit war härter als dein Schiff.', 'Ein Brocken zu viel.', 'Die Aliens lachen sich ins Fäustchen.', 'Von oben kam einfach zu viel.'];
 
 function zeigeEnde() {
   $('eSpruch').textContent = SPRUECHE[Math.floor(Math.random() * SPRUECHE.length)];
@@ -787,6 +915,7 @@ function zeigeEnde() {
   $('ePunkte').textContent = zahl(s.punkte);
   $('eWelle').textContent = s.welle;
   $('eBrocken').textContent = zahl(s.abgeschossen);
+  $('eAliens').textContent = zahl(s.aliensWeg);
   $('eRekord').textContent = zahl(daten.rekorde[daten.stufe]);
   const d = offenesDuell;
   $('eDuell').hidden = !d || d.stufe !== daten.stufe;
@@ -865,29 +994,209 @@ function leuchtPunkt(c, x, y, r, farbe) {
   c.globalAlpha = 1; c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
 }
 
-// Das Dreieck zeigt immer nach oben
-const SCHIFF_PFAD = new Path2D('M0 -16 L13 12 L0 6 L-13 12 Z');
+// Das Raumschiff: Pfeilrumpf mit Cockpit, zwei Flügeln mit je einem Geschütz, zwei Triebwerken
+const RUMPF = new Path2D('M0 -24 L5 -12 L7 -2 L22 6 L24 13 L9 11 L6 17 L-6 17 L-9 11 L-24 13 L-22 6 L-7 -2 L-5 -12 Z');
+const STREIFEN = new Path2D('M-7 -2 L-20 7 M7 -2 L20 7');
 function zeichneSchiff(c, x, y, opt = {}) {
+  const zeit = performance.now() / 1000;
   c.save();
   c.translate(x, y);
-  if (opt.neigung) c.rotate(opt.neigung);
-  neon(c, SCHIFF_PFAD, F.schiff, 2);
+  c.rotate(opt.a || 0);
+  c.scale(1.15, 1.15);
+  // Triebwerksflammen
+  for (const tx of [-4, 4]) {
+    const lang = 9 + Math.sin(zeit * 40 + tx) * 2.5 + Math.random() * 2;
+    const g = c.createLinearGradient(0, 16, 0, 16 + lang);
+    g.addColorStop(0, 'rgba(200, 250, 255, 0.95)');
+    g.addColorStop(0.4, 'rgba(34, 170, 255, 0.7)');
+    g.addColorStop(1, 'rgba(34, 120, 255, 0)');
+    c.fillStyle = g;
+    c.beginPath(); c.moveTo(tx - 2.6, 16); c.lineTo(tx, 16 + lang); c.lineTo(tx + 2.6, 16); c.fill();
+  }
+  // Geschütze: Rohre an den Flügeln, mit Mündungsfeuer beim Schuss
+  for (const gx of GESCHUETZE) {
+    c.fillStyle = '#1b2a3a';
+    c.fillRect(gx - 2, -12, 4, 18);
+    c.strokeStyle = '#7fe9ff';
+    c.lineWidth = 1;
+    c.strokeRect(gx - 2, -12, 4, 18);
+    c.fillStyle = '#c9fbff';
+    c.fillRect(gx - 2.4, -14, 4.8, 2.5);
+    if (opt.muendung) leuchtPunkt(c, gx, -16, 2.6, '#fff3a0');
+  }
+  // Rumpf: dunkles Metall mit leuchtender Kante
+  const metall = c.createLinearGradient(-24, 0, 24, 0);
+  metall.addColorStop(0, '#0d1826');
+  metall.addColorStop(0.5, '#25405a');
+  metall.addColorStop(1, '#0d1826');
+  c.fillStyle = metall;
+  c.fill(RUMPF);
+  neon(c, RUMPF, F.schiff, 1.6);
+  c.strokeStyle = '#ff2bd6';
+  c.globalAlpha = 0.85;
+  c.lineWidth = 1.4;
+  c.stroke(STREIFEN);
+  c.globalAlpha = 1;
+  // Cockpit aus Glas
+  const glas = c.createLinearGradient(0, -16, 0, 2);
+  glas.addColorStop(0, '#e8fdff');
+  glas.addColorStop(0.5, '#22e6ff');
+  glas.addColorStop(1, '#0a5f78');
+  c.fillStyle = glas;
+  c.beginPath(); c.ellipse(0, -7, 3.6, 7.5, 0, 0, TAU); c.fill();
+  c.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  c.beginPath(); c.ellipse(-1.2, -10, 1, 2.6, 0, 0, TAU); c.fill();
   if (opt.schutz) {
-    c.globalAlpha = 0.35 + 0.25 * Math.sin(performance.now() / 90);
+    c.globalAlpha = 0.35 + 0.25 * Math.sin(zeit * 11);
     c.strokeStyle = F.schiff;
     c.lineWidth = 1.2;
-    c.beginPath(); c.arc(0, 0, 24, 0, TAU); c.stroke();
+    c.beginPath(); c.arc(0, 0, 30, 0, TAU); c.stroke();
     c.globalAlpha = 1;
   }
   c.restore();
 }
 
+// Ein Meteorit wird einmal fertig gemalt und dann nur noch gedreht und verschoben
+function maleMeteor(b) {
+  const rand = 4;
+  const groesse = Math.ceil((b.r * 1.15 + rand) * 2 * massstab);
+  const bild = document.createElement('canvas');
+  bild.width = bild.height = groesse;
+  const c = bild.getContext('2d');
+  c.setTransform(massstab, 0, 0, massstab, groesse / 2, groesse / 2);
+  const form = new Path2D();
+  b.ecke.forEach(([x, y], i) => i ? form.lineTo(x, y) : form.moveTo(x, y));
+  form.closePath();
+  // Grundfarbe: Licht von oben links
+  const hell = b.farbton < 0.5 ? ['#9a8a7c', '#5e5249', '#231d19'] : ['#a28568', '#654a36', '#261a12'];
+  const g = c.createRadialGradient(-b.r * 0.4, -b.r * 0.4, b.r * 0.1, 0, 0, b.r * 1.15);
+  g.addColorStop(0, hell[0]);
+  g.addColorStop(0.55, hell[1]);
+  g.addColorStop(1, hell[2]);
+  c.fillStyle = g;
+  c.fill(form);
+  c.save();
+  c.clip(form);
+  // Körnige Oberfläche
+  for (let i = 0; i < b.r * 3; i++) {
+    const w = Math.random() * TAU, d = Math.random() * b.r;
+    c.fillStyle = Math.random() < 0.5 ? 'rgba(0, 0, 0, 0.18)' : 'rgba(255, 240, 220, 0.1)';
+    c.beginPath(); c.arc(Math.cos(w) * d, Math.sin(w) * d, zufall(0.4, 1.3), 0, TAU); c.fill();
+  }
+  // Krater: dunkle Mulde, unten rechts vom Licht getroffen
+  for (const k of b.krater) {
+    c.fillStyle = 'rgba(20, 14, 10, 0.45)';
+    c.beginPath(); c.arc(k.x, k.y, k.r, 0, TAU); c.fill();
+    c.strokeStyle = 'rgba(255, 235, 210, 0.22)';
+    c.lineWidth = Math.max(0.8, k.r * 0.22);
+    c.beginPath(); c.arc(k.x, k.y, k.r, 0.1 * Math.PI, 0.9 * Math.PI); c.stroke();
+    c.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+    c.beginPath(); c.arc(k.x, k.y, k.r, 1.1 * Math.PI, 1.9 * Math.PI); c.stroke();
+  }
+  // Schatten auf der lichtabgewandten Seite
+  const schatten = c.createLinearGradient(-b.r, -b.r, b.r, b.r);
+  schatten.addColorStop(0.45, 'rgba(0, 0, 0, 0)');
+  schatten.addColorStop(1, 'rgba(0, 0, 0, 0.55)');
+  c.fillStyle = schatten;
+  c.fillRect(-b.r * 1.2, -b.r * 1.2, b.r * 2.4, b.r * 2.4);
+  c.restore();
+  c.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+  c.lineWidth = 1;
+  c.stroke(form);
+  b.bild = bild;
+  b.bildMass = massstab;
+}
+
 function zeichneBrocken(c, b, x, y) {
+  if (!b.bild || b.bildMass !== massstab) maleMeteor(b);
+  // Glutschweif: Der Meteorit glüht beim Fallen, der Schweif zeigt nach hinten
+  const v = Math.hypot(b.vx, b.vy) || 1;
+  const nx = -b.vx / v, ny = -b.vy / v;
+  const lang = b.r * 2.6;
+  const g = c.createLinearGradient(x, y, x + nx * lang, y + ny * lang);
+  g.addColorStop(0, 'rgba(255, 170, 80, 0.5)');
+  g.addColorStop(0.35, 'rgba(255, 100, 35, 0.22)');
+  g.addColorStop(1, 'rgba(255, 60, 20, 0)');
+  c.fillStyle = g;
+  c.beginPath();
+  c.moveTo(x - ny * b.r * 0.7, y + nx * b.r * 0.7);
+  c.lineTo(x + nx * lang, y + ny * lang);
+  c.lineTo(x + ny * b.r * 0.7, y - nx * b.r * 0.7);
+  c.fill();
   c.save();
   c.translate(x, y);
   c.rotate(b.a);
-  neon(c, b.form, BROCKEN[b.g].farbe, b.g === 1 ? 1.6 : 1.9);
+  const g2 = b.bild.width / massstab;
+  c.drawImage(b.bild, -g2 / 2, -g2 / 2, g2, g2);
   c.restore();
+}
+
+// Aliens: eine Untertasse mit Glaskuppel, darin ein grünes Alien
+function zeichneAlien(c, a, zeit) {
+  const schuetze = a.art === 'schuetze';
+  const k = a.r / 25;
+  c.save();
+  c.translate(a.x, a.y + Math.sin(zeit * 3 + a.x) * 1.5);
+  c.scale(k, k);
+  // Leuchten unter der Untertasse
+  c.fillStyle = schuetze ? 'rgba(255, 51, 85, 0.18)' : 'rgba(125, 255, 74, 0.16)';
+  c.beginPath(); c.ellipse(0, 6, 34, 14, 0, 0, TAU); c.fill();
+  // Kuppel mit Alien
+  c.save();
+  c.beginPath(); c.ellipse(0, -4, 12, 13, 0, Math.PI, TAU); c.closePath(); c.clip();
+  c.fillStyle = 'rgba(120, 220, 255, 0.22)';
+  c.fillRect(-14, -18, 28, 16);
+  c.fillStyle = '#5be04a';
+  c.beginPath(); c.ellipse(0, -6, 6.5, 7.5, 0, 0, TAU); c.fill();
+  c.fillStyle = '#05110a';
+  c.beginPath(); c.ellipse(-2.8, -7, 2.4, 3.4, -0.5, 0, TAU); c.ellipse(2.8, -7, 2.4, 3.4, 0.5, 0, TAU); c.fill();
+  c.fillStyle = '#fff';
+  c.beginPath(); c.arc(-3.3, -8.4, 0.8, 0, TAU); c.arc(2.3, -8.4, 0.8, 0, TAU); c.fill();
+  c.restore();
+  c.strokeStyle = 'rgba(200, 245, 255, 0.8)';
+  c.lineWidth = 1;
+  c.beginPath(); c.ellipse(0, -4, 12, 13, 0, Math.PI, TAU); c.stroke();
+  c.fillStyle = 'rgba(255, 255, 255, 0.5)';
+  c.beginPath(); c.ellipse(-6, -11, 2, 4, 0.5, 0, TAU); c.fill();
+  // Untertasse aus Metall
+  const metall = c.createLinearGradient(0, -6, 0, 10);
+  metall.addColorStop(0, schuetze ? '#8a8fa8' : '#9db3a4');
+  metall.addColorStop(0.5, schuetze ? '#3d3f55' : '#3d5547');
+  metall.addColorStop(1, '#14151f');
+  c.fillStyle = metall;
+  c.beginPath(); c.ellipse(0, 2, 26, 8.5, 0, 0, TAU); c.fill();
+  c.strokeStyle = schuetze ? F.plasma : F.alien;
+  c.lineWidth = 1.4;
+  c.stroke();
+  // Blinkende Lichter am Rand
+  for (let i = 0; i < 5; i++) {
+    const an = Math.floor(zeit * 6 + i) % 2 === 0;
+    c.fillStyle = an ? (schuetze ? '#ff6b80' : '#c6ff9e') : 'rgba(255, 255, 255, 0.15)';
+    c.beginPath(); c.arc(-16 + i * 8, 3.5, 1.8, 0, TAU); c.fill();
+  }
+  // Der Schütze hat eine Kanone unten
+  if (schuetze) {
+    c.fillStyle = '#2a2c3c';
+    c.fillRect(-3, 8, 6, 8);
+    c.fillStyle = F.plasma;
+    c.fillRect(-3.5, 14, 7, 2.5);
+  }
+  if (a.blitz > 0) {
+    c.globalCompositeOperation = 'lighter';
+    c.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    c.beginPath(); c.ellipse(0, 0, 27, 14, 0, 0, TAU); c.fill();
+    c.globalCompositeOperation = 'source-over';
+  }
+  c.restore();
+  // Lebensbalken für Aliens mit mehr als einem Leben
+  const voll = schuetze ? STUFEN[daten.stufe].alienLeben : 1;
+  if (voll > 1) {
+    const b = a.r * 1.4;
+    c.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    c.fillRect(a.x - b / 2, a.y - a.r - 8, b, 3);
+    c.fillStyle = F.plasma;
+    c.fillRect(a.x - b / 2, a.y - a.r - 8, b * a.leben / voll, 3);
+  }
 }
 
 function baueHintergrund() {
@@ -908,7 +1217,7 @@ function baueHintergrund() {
     c.beginPath(); c.arc(r() * W, r() * H, 0.5 + r() * 0.8, 0, TAU); c.fill();
   }
   // Die Leiste unten, auf der das Schiff fährt
-  const y = H - ABSTAND_UNTEN + 20;
+  const y = H - ABSTAND_UNTEN + 32;
   const leiste = new Path2D();
   leiste.moveTo(10, y); leiste.lineTo(W - 10, y);
   c.globalAlpha = 1;
@@ -926,23 +1235,59 @@ function zeichne() {
   c.setTransform(massstab, 0, 0, massstab, wx * massstab, wy * massstab);
 
   for (const b of s.brocken) zeichneBrocken(c, b, b.x, b.y);
-  for (const k of s.kugeln) leuchtPunkt(c, k.x, k.y, 2.2, F.kugel);
+  for (const a of s.aliens) zeichneAlien(c, a, zeit);
+  // Eigene Schüsse als kurze Laserstriche, Alien-Schüsse als rote Plasmakugeln
+  c.lineCap = 'round';
+  for (const k of s.kugeln) {
+    const v = Math.hypot(k.vx, k.vy);
+    const p = new Path2D();
+    p.moveTo(k.x, k.y); p.lineTo(k.x - k.vx / v * 10, k.y - k.vy / v * 10);
+    neon(c, p, F.kugel, 1.8);
+  }
+  for (const p of s.plasma) {
+    c.fillStyle = F.plasma;
+    c.globalAlpha = 0.25 + 0.1 * Math.sin(zeit * 30);
+    c.beginPath(); c.arc(p.x, p.y, 9, 0, TAU); c.fill();
+    c.globalAlpha = 0.6;
+    c.beginPath(); c.arc(p.x, p.y, 5, 0, TAU); c.fill();
+    c.globalAlpha = 1;
+    c.fillStyle = '#ffd6dc';
+    c.beginPath(); c.arc(p.x, p.y, 2.4, 0, TAU); c.fill();
+  }
 
   const sch = s.schiff;
   if (sch.sichtbar) {
     // Nach einem Treffer blinkt das Schiff: So lange kann dir nichts passieren
     const blinkt = sch.schutz > 0 && Math.floor(zeit * 8) % 2 === 0;
-    if (!blinkt) zeichneSchiff(c, sch.x, schiffY(), { schutz: sch.schutz > 0, neigung: sch.vx / SCHIFF_TEMPO * 0.18 });
+    if (!blinkt) zeichneSchiff(c, sch.x, schiffY(), { schutz: sch.schutz > 0, a: sch.a + sch.vx / SCHIFF_TEMPO * 0.12, muendung: sch.muendung > 0 });
+    // Feine Ziellinie, wenn das Schiff geneigt ist
+    if (Math.abs(sch.a) > 0.05 && s.phase === 'lauf') {
+      const y = schiffY();
+      const g = c.createLinearGradient(sch.x, y, sch.x + Math.sin(sch.a) * 160, y - Math.cos(sch.a) * 160);
+      g.addColorStop(0, 'rgba(34, 230, 255, 0.35)');
+      g.addColorStop(1, 'rgba(34, 230, 255, 0)');
+      c.strokeStyle = g;
+      c.lineWidth = 1;
+      c.setLineDash([4, 6]);
+      c.beginPath(); c.moveTo(sch.x + Math.sin(sch.a) * 28, y - Math.cos(sch.a) * 28); c.lineTo(sch.x + Math.sin(sch.a) * 160, y - Math.cos(sch.a) * 160); c.stroke();
+      c.setLineDash([]);
+    }
   }
 
   for (const t of s.truemmer) {
     c.save();
     c.translate(t.x, t.y);
     c.rotate(t.a);
-    c.globalAlpha = Math.min(1, t.t);
-    const p = new Path2D();
-    p.moveTo(-t.laenge / 2, 0); p.lineTo(t.laenge / 2, 0);
-    neon(c, p, F.schiff, 1.8);
+    c.globalAlpha = Math.min(1, t.t * 2);
+    if (t.stein) {
+      // Gesteinssplitter
+      c.fillStyle = '#7a6a5c';
+      c.beginPath(); c.moveTo(-t.laenge, 0); c.lineTo(0, -t.laenge * 0.7); c.lineTo(t.laenge * 0.8, t.laenge * 0.3); c.closePath(); c.fill();
+    } else {
+      const p = new Path2D();
+      p.moveTo(-t.laenge / 2, 0); p.lineTo(t.laenge / 2, 0);
+      neon(c, p, F.schiff, 1.8);
+    }
     c.restore();
   }
   for (const t of s.teilchen) {
@@ -967,7 +1312,7 @@ function zeichne() {
     c.shadowBlur = 16 * massstab;
     schreibe(c, s.banner, W / 2, H / 2 - 60, F.schiff, 24, true);
     c.shadowBlur = 0;
-    if (s.welle === 1) schreibe(c, tippGeraet ? 'Links fahren, rechts schießen' : 'Pfeile fahren, Leertaste schießt', W / 2, H / 2 - 10, '#cfe9f5', 15);
+    if (s.welle === 1) schreibe(c, tippGeraet ? 'Links fahren, rechts drehen und schießen' : 'Pfeile fahren, Q und E drehen, Leertaste schießt', W / 2, H / 2 - 10, '#cfe9f5', 15);
     c.globalAlpha = 1;
   }
 }
@@ -987,7 +1332,8 @@ function passeGroesseAn() {
   // Alles bleibt an derselben Stelle im Verhältnis zum Feld
   if (s && (altW !== W || altH !== H)) {
     s.schiff.x = begrenzt(s.schiff.x / altW * W, 18, W - 18);
-    for (const o of [...s.brocken, ...s.kugeln]) { o.x = o.x / altW * W; o.y = o.y / altH * H; }
+    for (const o of [...s.brocken, ...s.kugeln, ...s.aliens, ...s.plasma]) { o.x = o.x / altW * W; o.y = o.y / altH * H; }
+    for (const a of s.aliens) if (a.hoehe) a.hoehe = a.hoehe / altH * H;
   }
   baueHintergrund();
 }
@@ -1078,8 +1424,8 @@ function baueStart() {
   const k = leinw.width / 84;
   c.setTransform(k, 0, 0, k, 0, 0);
   c.save(); c.translate(52, 20); c.scale(0.72, 0.72); zeichneBrocken(c, startBrocken, 0, 0); c.restore();
-  leuchtPunkt(c, 42, 38, 1.6, F.kugel);
-  c.save(); c.translate(42, 52); c.scale(0.7, 0.7); zeichneSchiff(c, 0, 0); c.restore();
+  for (const gx of [-7.5, 7.5]) leuchtPunkt(c, 42 + gx, 33, 1.2, F.kugel);
+  c.save(); c.translate(42, 50); c.scale(0.5, 0.5); zeichneSchiff(c, 0, 0); c.restore();
 }
 
 function baueListe() {
@@ -1124,8 +1470,8 @@ function baueListe() {
 
 function baueHilfe() {
   $('hilfeSteuerung').textContent = tippGeraet
-    ? 'Linke Zone: Finger links fährt nach links, rechts nach rechts. Rechte Zone: Feuer. Gedrückt halten schießt immer weiter.'
-    : 'Pfeil links und rechts fahren, Leertaste oder Pfeil hoch schießt. Gedrückt halten schießt immer weiter. P ist Pause, M schaltet den Ton.';
+    ? 'Linke Zone: nach links und rechts fahren. Rechte Zone: außen neigst du das Schiff zum Zielen, in der Mitte feuerst du. Gedrückt halten schießt immer weiter.'
+    : 'Pfeil links und rechts fahren. Q und E (oder Y und X) neigen das Schiff zum Zielen, Pfeil runter richtet es gerade aus. Leertaste oder Pfeil hoch schießt. P ist Pause, M schaltet den Ton.';
 }
 
 // --------------------------- Freunde herausfordern ---------------------------
@@ -1234,11 +1580,13 @@ const gedrueckt = new Set();
 const TASTEN = {
   ArrowLeft: 'links', a: 'links', A: 'links',
   ArrowRight: 'rechts', d: 'rechts', D: 'rechts',
-  ' ': 'feuer', Spacebar: 'feuer', ArrowUp: 'feuer', w: 'feuer', W: 'feuer'
+  ' ': 'feuer', Spacebar: 'feuer', ArrowUp: 'feuer',
+  q: 'drehLinks', Q: 'drehLinks', y: 'drehLinks', Y: 'drehLinks', z: 'drehLinks', Z: 'drehLinks',
+  e: 'drehRechts', E: 'drehRechts', x: 'drehRechts', X: 'drehRechts'
 };
 
 function eingabeNeu() {
-  for (const teil of ['links', 'rechts', 'feuer']) {
+  for (const teil of ['links', 'rechts', 'feuer', 'drehLinks', 'drehRechts']) {
     let an = false;
     for (const key of gedrueckt) if (TASTEN[key] === teil) an = true;
     for (const f of finger.values()) if (f.teil === teil) an = true;
@@ -1258,7 +1606,9 @@ window.addEventListener('keydown', e => {
   if (e.key in TASTEN || e.key === 'ArrowDown') {
     if (!$('fenster').hidden) return;
     e.preventDefault();
-    if (s.phase !== 'lauf' || e.key === 'ArrowDown') return;
+    if (s.phase !== 'lauf') return;
+    // Pfeil runter richtet das Schiff wieder gerade aus
+    if (e.key === 'ArrowDown') { s.schiff.a = 0; return; }
     ton.an();
     if (TASTEN[e.key] === 'feuer' && !e.repeat) s.schussWunsch = true;
     gedrueckt.add(e.key);
@@ -1284,9 +1634,11 @@ window.addEventListener('keyup', e => {
 // Jeder Finger zählt einzeln. In der linken Zone kann man hin und her rutschen, ohne loszulassen.
 const finger = new Map();
 function teilUnter(zone, x) {
-  if (zone.id === 'zoneRechts') return 'feuer';
   const r = zone.getBoundingClientRect();
-  return x < r.left + r.width / 2 ? 'links' : 'rechts';
+  const anteil = (x - r.left) / r.width;
+  if (zone.id === 'zoneLinks') return anteil < 0.5 ? 'links' : 'rechts';
+  // Rechte Zone: außen drehen, in der Mitte feuern
+  return anteil < 0.27 ? 'drehLinks' : anteil > 0.73 ? 'drehRechts' : 'feuer';
 }
 for (const zone of document.querySelectorAll('.zone')) {
   zone.addEventListener('pointerdown', e => {
@@ -1333,7 +1685,7 @@ function bild(jetzt) {
   const offen = !$('fenster').hidden;
   // Im Menü und nach dem Spiel fallen die Brocken einfach weiter
   if (!offen || s.phase === 'aus' || s.phase === 'menue') {
-    if (s.phase === 'menue' && s.brocken.length < 5) s.brocken.push(neuerBrocken(zufall(50, W - 50), -50, 1 + Math.floor(Math.random() * 3)));
+    if (s.phase === 'menue' && s.brocken.length < 4) s.brocken.push(neuerBrocken(zufall(50, W - 50), -50, 1 + Math.floor(Math.random() * 3)));
     // Kleine Schritte, damit schnelle Schüsse nicht durch kleine Brocken fliegen
     const teile = Math.ceil(dt / (1 / 120));
     for (let i = 0; i < teile; i++) rechne(dt / teile);
