@@ -44,7 +44,7 @@
   }
 
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: var(--bg); touch-action: none; }
+  html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: var(--bg); touch-action: none; -webkit-text-size-adjust: 100%; }
   body {
     position: fixed;
     inset: 0;
@@ -111,6 +111,7 @@
   /* Zwei Touch-Zonen fürs Handy: links drehen, rechts Schub und Feuer */
   #tasten { display: none; flex: none; gap: 8px; height: 104px; margin-top: 8px; }
   body.tipp #tasten { display: flex; }
+  #tasten, #tasten * { touch-action: none; -webkit-user-select: none; user-select: none; }
   .zone { position: relative; display: flex; flex: 1 1 0; min-width: 0; overflow: hidden; border: 1.5px solid rgba(34, 230, 255, 0.45); border-radius: 18px; touch-action: none; }
   .zone .teil { display: grid; flex: 1 1 0; place-items: center; color: rgba(34, 230, 255, 0.85); pointer-events: none; }
   .zone .teil + .teil { border-left: 1px solid rgba(34, 230, 255, 0.25); }
@@ -1886,6 +1887,26 @@ for (const zone of document.querySelectorAll('.zone')) {
 }
 // Kein Kontextmenü bei langem Drücken
 document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('#tasten, #bild')) e.preventDefault(); });
+
+// Kein Hineinzoomen auf dem Handy: Der Browser (vor allem auf dem iPhone) vergrößert sonst die Seite,
+// wenn man schnell zweimal auf einen Knopf tippt oder mit zwei Fingern drückt.
+// Die Knöpfe funktionieren trotzdem, weil das Spiel auf die Pointer-Ereignisse hört.
+const imSpielfeld = e => e.target.closest && e.target.closest('#tasten, #feld, #hud');
+for (const art of ['touchstart', 'touchmove', 'touchend']) {
+  document.addEventListener(art, e => {
+    if (imSpielfeld(e) && !(e.target.closest && e.target.closest('button'))) e.preventDefault();
+  }, { passive: false });
+}
+// Zwei schnelle Tipps hintereinander nie als Zoom werten, auch nicht auf den kleinen Knöpfen oben
+let letzterTipp = 0;
+document.addEventListener('touchend', e => {
+  const jetzt = Date.now();
+  const knopf = e.target.closest && e.target.closest('button');
+  if (jetzt - letzterTipp < 350 && $('fenster').hidden && !knopf) e.preventDefault();
+  letzterTipp = jetzt;
+}, { passive: false });
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+for (const art of ['gesturestart', 'gesturechange', 'gestureend']) document.addEventListener(art, e => e.preventDefault(), { passive: false });
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && s.phase === 'lauf') pausiere();
