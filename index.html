@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Brocken-Jäger – Pixelhafen</title>
+<meta name="description" content="Das klassische Weltraumspiel in Neon: Schieß die Felsbrocken klein, bevor sie dich treffen. Kostenlos, ohne Anmeldung, ohne Werbung.">
+<!-- App-Einstellungen, damit sich das Spiel auf dem Handy wie eine App verhält -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Brocken-Jäger">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<style>
+  /* Schrift "Press Start 2P", Copyright 2012 The Press Start 2P Project Authors,
+     SIL Open Font License 1.1 (https://openfontlicense.org). Sie steckt direkt in dieser
+     Datei, damit das Spiel auch offline und ohne Verbindung zu Google richtig aussieht. */
+  @font-face {
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(data:font/woff2;base64,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) format('woff2');
+  }
+
+  /* Pixelhafen-Rahmen, für Brocken-Jäger immer dunkel wie der Weltraum */
+  :root {
+    color-scheme: dark;
+    --bg: #000000;
+    --surface: #0b1018;
+    --surface-2: #141c28;
+    --line: #26384a;
+    --text: #eef8ff;
+    --muted: #a9bccb;
+    --accent: #22e6ff;
+    --accent-edge: #0a8fa3;
+    --on-accent: #00222a;
+    --gefahr: #ff2bd6;
+    --retro: 'Press Start 2P', 'Courier New', monospace;
+    --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: var(--bg); touch-action: none; }
+  body {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    color: var(--text);
+    font: 16px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+    /* Kein Markieren und kein Lupen-Menü beim Spielen mit dem Finger */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  [hidden] { display: none !important; }
+
+  /* Anzeige oben */
+  #hud {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 720px;
+    min-height: 56px;
+    margin: 0 auto;
+    padding: 4px 8px 4px 14px;
+  }
+  .wert { display: grid; flex: none; gap: 5px; }
+  .wert small { overflow: hidden; color: var(--muted); font: 8px/1 var(--retro); white-space: nowrap; }
+  .wert b { font: 400 13px/1 var(--retro); white-space: nowrap; }
+  #punkte { color: var(--accent); text-shadow: 0 0 10px rgba(34, 230, 255, 0.7); }
+  #lebenBox { margin-right: auto; }
+  #leben { display: flex; align-items: center; gap: 3px; height: 13px; color: var(--accent); }
+  #leben svg { width: 12px; height: 13px; flex: none; filter: drop-shadow(0 0 3px rgba(34, 230, 255, 0.8)); }
+  .knoepfchen { display: flex; flex: none; gap: 6px; }
+  .rund {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--text);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .rund:hover { background: var(--surface-2); }
+  .rund svg { width: 18px; height: 18px; }
+  #tonAus { display: none; }
+  .stumm #tonAn { display: none; }
+  .stumm #tonAus { display: block; }
+
+  /* Spielfeld: schwarz wie der Weltraum, mit leuchtendem Rand */
+  #feld { position: relative; flex: 1 1 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 0 8px 8px; }
+  #buehne { position: relative; flex: 1 1 0; min-height: 0; }
+  canvas#bild { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #000; border-radius: 10px; box-shadow: 0 0 0 1px #12303c, 0 0 22px rgba(34, 230, 255, 0.18); touch-action: none; }
+  body.imSpiel canvas#bild { cursor: none; }
+
+  /* Zwei Touch-Zonen fürs Handy: links drehen, rechts Schub und Feuer */
+  #tasten { display: none; flex: none; gap: 8px; height: 104px; margin-top: 8px; }
+  body.tipp #tasten { display: flex; }
+  .zone { position: relative; display: flex; flex: 1 1 0; min-width: 0; overflow: hidden; border: 1.5px solid rgba(34, 230, 255, 0.45); border-radius: 18px; touch-action: none; }
+  .zone .teil { display: grid; flex: 1 1 0; place-items: center; color: rgba(34, 230, 255, 0.85); pointer-events: none; }
+  .zone .teil + .teil { border-left: 1px solid rgba(34, 230, 255, 0.25); }
+  .zone .teil svg { width: 34px; height: 34px; }
+  .zone .teil small { display: block; margin-top: 4px; font: 7px/1 var(--retro); text-align: center; }
+  .zone .teil.an { color: #ffffff; background: rgba(34, 230, 255, 0.22); }
+  .zone .teil.feuer { color: rgba(255, 247, 168, 0.95); }
+  .zone .teil.feuer.an { background: rgba(255, 240, 120, 0.2); }
+  #hyperKnopf {
+    flex: none;
+    width: 58px;
+    padding: 0;
+    color: var(--muted);
+    background: transparent;
+    border: 1.5px dashed rgba(169, 188, 203, 0.45);
+    border-radius: 18px;
+    font: 7px/1.6 var(--retro);
+    touch-action: none;
+  }
+  #hyperKnopf svg { display: block; width: 26px; height: 26px; margin: 0 auto 6px; }
+  #hyperKnopf.an { color: #fff; background: rgba(255, 255, 255, 0.12); }
+
+  /* Fenster für Start, Pause und Ende */
+  #fenster {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.55);
+    touch-action: pan-y;
+  }
+  .tafel {
+    width: min(420px, 100%);
+    margin: auto;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid #22e6ff;
+    border-radius: 18px;
+    box-shadow: 0 0 26px rgba(34, 230, 255, 0.28);
+  }
+  .marke { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: var(--muted); font: 9px/1.5 var(--retro); }
+  .marke svg { width: 22px; height: 22px; flex: none; color: var(--gefahr); }
+  h1, h2 { margin: 0; color: #22e6ff; font: 400 clamp(19px, 6vw, 25px)/1.3 var(--retro); letter-spacing: -0.02em; overflow-wrap: anywhere; text-shadow: 0 0 14px rgba(34, 230, 255, 0.6); }
+  h2 { font-size: clamp(16px, 5vw, 21px); }
+  .titelzeile { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #startBild { flex: none; width: 84px; height: 64px; }
+  .unterzeile { margin: 12px 0 0; color: var(--muted); }
+  .klein { margin: 12px 0 0; color: var(--muted); font-size: 15px; line-height: 1.4; }
+  .rekord { margin: 16px 0 0; color: var(--muted); font: 10px/1.6 var(--retro); }
+  .rekord b { color: var(--accent); font-weight: 400; }
+  .zahlen { display: grid; gap: 8px; margin: 18px 0 0; padding: 0; }
+  .zahlen div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .zahlen dt { color: var(--muted); }
+  .zahlen dd { margin: 0; font: 13px/1.4 var(--retro); }
+  .hervor { margin: 16px 0 0; color: var(--accent); font: 11px/1.6 var(--retro); }
+  .knoepfe { display: grid; gap: 12px; margin-top: 20px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 10px 18px;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 3px 0 var(--line);
+    font: 600 16px/1.3 var(--body);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); }
+  .btn.main { color: var(--on-accent); background: #22e6ff; border-color: #22e6ff; box-shadow: 0 3px 0 var(--accent-edge), 0 0 18px rgba(34, 230, 255, 0.45); }
+  .btn.main:active { box-shadow: 0 1px 0 var(--accent-edge), 0 0 12px rgba(34, 230, 255, 0.45); }
+  .paar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Schwierigkeit */
+  .stufen { display: flex; gap: 4px; margin-top: 18px; padding: 4px; background: var(--surface-2); border-radius: 14px; }
+  .stufen button {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 4px;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    font: 600 15px/1.3 var(--body);
+    cursor: pointer;
+  }
+  .stufen button:hover { color: var(--text); }
+  .stufen button[aria-pressed="true"] { color: var(--text); background: var(--surface); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--line); }
+
+  /* Herausforderung eines Freundes */
+  #duell { margin: 16px 0 0; padding: 12px 14px; background: var(--surface-2); border-left: 4px solid #22e6ff; border-radius: 8px; line-height: 1.4; }
+  #duell strong { display: block; margin-bottom: 4px; color: var(--accent); font: 10px/1.6 var(--retro); overflow-wrap: anywhere; }
+
+  /* Rangliste */
+  #liste { display: grid; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+  #liste li { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 4px 6px 4px 12px; background: var(--surface-2); border-radius: 10px; }
+  #liste li.ich { box-shadow: inset 0 0 0 2px #22e6ff; }
+  #liste .platz { flex: none; width: 22px; color: var(--muted); font: 10px/1 var(--retro); }
+  #liste .wer { flex: 1 1 auto; min-width: 0; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  #liste .wie { flex: none; font: 11px/1 var(--retro); }
+  #liste .weg { flex: none; width: 36px; height: 36px; padding: 0; color: var(--muted); cursor: pointer; background: transparent; border: 0; border-radius: 8px; font-size: 20px; line-height: 1; }
+  #liste .weg:hover { color: var(--text); background: var(--surface); }
+  #liste .platzhalter { width: 36px; flex: none; }
+
+  /* Teilen */
+  label.feldname { display: grid; gap: 6px; margin-top: 16px; font-weight: 600; }
+  input[type="text"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font: 16px/1.3 var(--body); /* 16px verhindert das Zoomen auf dem iPhone */
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  #teilenStatus { min-height: 24px; margin: 12px 0 0; color: var(--accent); font-weight: 600; }
+  #teilenStatus:empty { display: none; }
+
+  /* Hilfe */
+  .regeln { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; font-size: 15px; line-height: 1.4; }
+  .regeln li { display: grid; grid-template-columns: 8px 1fr; column-gap: 10px; }
+  .regeln li::before { content: ''; width: 8px; height: 8px; margin-top: 7px; background: var(--gefahr); }
+  .punkteTabelle { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 14px 0 0; font-size: 15px; }
+  .punkteTabelle b { font: 11px/1.6 var(--retro); color: var(--accent); text-align: right; }
+
+  /* Handy quer: Anzeige an den Rand, Touch-Zonen liegen unten über dem Feld */
+  @media (orientation: landscape) and (max-height: 560px) {
+    body { flex-direction: row; }
+    #hud { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; width: 112px; max-width: none; height: 100%; margin: 0; padding: 6px 4px 6px 10px; }
+    #lebenBox { margin-right: 0; }
+    #feld { padding: 8px 8px 8px 0; }
+    body.tipp #tasten { position: absolute; left: 8px; right: 16px; bottom: 16px; height: 86px; margin: 0; justify-content: space-between; pointer-events: none; }
+    body.tipp #tasten > * { pointer-events: auto; }
+    .zone { flex: 0 0 210px; background: rgba(0, 10, 16, 0.25); }
+    .tafel { width: min(620px, 100%); padding: 16px 20px; }
+    #fStart .marke, #fStart .unterzeile, #fStart .js-stufentext { display: none; }
+    #fStart .stufen, #fStart .rekord { margin-top: 10px; }
+    #fStart .knoepfe { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    #fStart .btn.main { grid-column: 1 / -1; }
+    #fStart .paar { display: contents; }
+    #startBild { width: 42px; height: 32px; }
+  }
+
+  @media (max-width: 359px) {
+    #hud { gap: 10px; padding-left: 8px; padding-right: 6px; }
+    .wert b { font-size: 11px; }
+    .rund { width: 40px; height: 44px; }
+    .tafel { padding: 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn:active { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 11 11"><path fill="currentColor" d="M4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM4 1h1v1h-1zM6 1h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM5 3h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM7 4h1v1h-1zM5 5h1v1h-1zM0 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM0 7h1v1h-1zM1 7h1v1h-1zM5 7h1v1h-1zM9 7h1v1h-1zM10 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM2 9h1v1h-1zM5 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM3 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1z"/></symbol>
+  <symbol id="schiff" viewBox="0 0 24 26"><path d="M12 2 L21 23 L12 18 L3 23 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div id="hud">
+  <div class="wert"><small>PUNKTE</small><b id="punkte">0</b></div>
+  <div class="wert"><small>WELLE</small><b id="welleAnzeige">1</b></div>
+  <div class="wert" id="lebenBox"><small>LEBEN</small><b id="leben"></b></div>
+  <div class="knoepfchen">
+    <button class="rund" id="tonKnopf" type="button" aria-label="Ton an oder aus">
+      <svg id="tonAn" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 5h3v6H2zM6 4h1v8H6zM7 3h1v10H7zM10 6h1v4h-1zM12 4h1v8h-1z"/></svg>
+      <svg id="tonAus" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 5h3v6H2zM6 4h1v8H6zM7 3h1v10H7zM10 6h1v1h-1zM11 7h1v1h-1zM12 8h1v1h-1zM13 9h1v1h-1zM13 6h1v1h-1zM12 7h1v1h-1zM11 8h1v1h-1zM10 9h1v1h-1z"/></svg>
+    </button>
+    <button class="rund" id="pauseKnopf" type="button" aria-label="Pause">
+      <svg viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="feld">
+  <div id="buehne"><canvas id="bild" role="img" aria-label="Spielfeld von Brocken-Jäger"></canvas></div>
+  <div id="tasten" aria-hidden="true">
+    <div class="zone" id="zoneLinks">
+      <span class="teil" data-teil="links"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15a7.5 7.5 0 1 0 2.2-8.6"/><path d="M6.5 2.5v4.5H11"/></svg><small>DREHEN</small></span></span>
+      <span class="teil" data-teil="rechts"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 15a7.5 7.5 0 1 1-2.2-8.6"/><path d="M17.5 2.5v4.5H13"/></svg><small>DREHEN</small></span></span>
+    </div>
+    <button id="hyperKnopf" type="button" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5L19 19M19 5l-2.5 2.5M7.5 16.5L5 19"/></svg>HYPER</button>
+    <div class="zone" id="zoneRechts">
+      <span class="teil" data-teil="schub"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l6 14-6-3.5L6 17z"/><path d="M10 19.5l2 2 2-2"/></svg><small>SCHUB</small></span></span>
+      <span class="teil feuer" data-teil="feuer"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg><small>FEUER</small></span></span>
+    </div>
+  </div>
+</div>
+
+<div id="fenster">
+  <div class="tafel">
+
+    <section id="fStart">
+      <p class="marke"><svg aria-hidden="true"><use href="#logo"/></svg>PIXELHAFEN</p>
+      <div class="titelzeile">
+        <h1>BROCKEN&shy;JÄGER</h1>
+        <canvas id="startBild" width="336" height="256" aria-hidden="true"></canvas>
+      </div>
+      <p class="unterzeile">Felsbrocken von allen Seiten. Schieß sie klein, bevor sie dich treffen.</p>
+      <div id="duell" hidden><strong id="duellTitel"></strong><span id="duellText"></span></div>
+      <div class="stufen" role="group" aria-label="Schwierigkeit"></div>
+      <p class="klein js-stufentext"></p>
+      <p class="rekord">REKORD <b class="js-rekord">0</b></p>
+      <div class="knoepfe">
+        <button class="btn main" id="losKnopf" type="button">Spielen</button>
+        <div class="paar">
+          <button class="btn" type="button" data-oeffne="fListe">Rangliste</button>
+          <button class="btn" type="button" data-oeffne="fHilfe">So geht's</button>
+        </div>
+        <a class="btn" href="https://moje9328.github.io/spiele/">Zur Pixelhafen-Seite</a>
+      </div>
+    </section>
+
+    <section id="fListe" hidden>
+      <h2>RANGLISTE</h2>
+      <div class="stufen" role="group" aria-label="Schwierigkeit"></div>
+      <ol id="liste"></ol>
+      <p class="klein">Schick deinen Link an Freunde. Schicken sie dir ihren zurück, stehen sie hier in deiner Liste. Alles bleibt auf deinem Gerät.</p>
+      <div class="knoepfe">
+        <button class="btn main" id="listeTeilen" type="button">Freunde herausfordern</button>
+        <button class="btn" type="button" data-oeffne="fStart">Zurück</button>
+      </div>
+    </section>
+
+    <section id="fHilfe" hidden>
+      <h2>SO GEHT'S</h2>
+      <ul class="regeln">
+        <li><strong id="hilfeSteuerung"></strong></li>
+        <li>Türkis bist du. Alles andere, was leuchtet, ist gefährlich.</li>
+        <li>Große Brocken zerfallen in zwei mittlere, mittlere in zwei kleine. Kleine verschwinden ganz.</li>
+        <li>Wer über den Rand fliegt, kommt auf der anderen Seite wieder herein. Das gilt für dich und für die Brocken.</li>
+        <li>Ab und zu kommt ein grünes Ufo und schießt auf dich. Das kleine zielt genau.</li>
+        <li>Hyperraum bringt dich an eine zufällige Stelle. Das rettet dich, aber du kannst auch direkt neben einem Brocken landen.</li>
+        <li>Alle 10.000 Punkte bekommst du ein Leben dazu.</li>
+      </ul>
+      <div class="punkteTabelle">
+        <span>Großer Brocken</span><b>20</b>
+        <span>Mittlerer Brocken</span><b>50</b>
+        <span>Kleiner Brocken</span><b>100</b>
+        <span>Großes Ufo</span><b>200</b>
+        <span>Kleines Ufo</span><b>1000</b>
+      </div>
+      <div class="knoepfe"><button class="btn" type="button" data-oeffne="fStart">Zurück</button></div>
+    </section>
+
+    <section id="fPause" hidden>
+      <h2>PAUSE</h2>
+      <p class="rekord">PUNKTE <b id="pausePunkte">0</b></p>
+      <div class="knoepfe">
+        <button class="btn main" id="weiterKnopf" type="button">Weiterspielen</button>
+        <button class="btn" id="pauseNeu" type="button">Neu starten</button>
+        <button class="btn" id="pauseMenue" type="button">Spiel beenden</button>
+      </div>
+    </section>
+
+    <section id="fEnde" hidden>
+      <h2 id="eTitel">GAME OVER</h2>
+      <p class="klein" id="eSpruch"></p>
+      <p class="hervor" id="neuerRekord" hidden>NEUER REKORD!</p>
+      <dl class="zahlen">
+        <div><dt>Punkte</dt><dd id="ePunkte"></dd></div>
+        <div><dt>Welle</dt><dd id="eWelle"></dd></div>
+        <div><dt>Brocken zerlegt</dt><dd id="eBrocken"></dd></div>
+        <div><dt>Dein Rekord</dt><dd id="eRekord"></dd></div>
+      </dl>
+      <p class="klein" id="eDuell" hidden></p>
+      <div class="knoepfe">
+        <button class="btn main" id="nochmalKnopf" type="button">Nochmal</button>
+        <button class="btn" id="endeTeilen" type="button">Freunde herausfordern</button>
+        <button class="btn" type="button" data-oeffne="fStart">Zum Menü</button>
+      </div>
+    </section>
+
+    <section id="fTeilen" hidden>
+      <h2>HERAUSFORDERN</h2>
+      <p class="unterzeile" id="teilenText"></p>
+      <label class="feldname">Dein Name für den Link
+        <input type="text" id="nameFeld" maxlength="12" autocomplete="off" placeholder="zum Beispiel Sam">
+      </label>
+      <p class="klein">Dein Name und deine Punkte stehen im Link. Mehr nicht, und du entscheidest, wem du ihn schickst.</p>
+      <p id="teilenStatus" role="status"></p>
+      <input type="text" id="linkFeld" readonly hidden aria-label="Dein Link zum Kopieren">
+      <div class="knoepfe">
+        <button class="btn main" id="teilenKnopf" type="button">Link teilen</button>
+        <button class="btn" id="teilenZurueck" type="button">Zurück</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+const SPIEL_ADRESSE = 'https://moje9328.github.io/brockenjaeger/';
+const SPEICHER = 'brockenjaeger';
+
+const zahl = n => n.toLocaleString('de-DE');
+const begrenzt = (w, a, b) => Math.max(a, Math.min(b, w));
+const zufall = (a, b) => a + Math.random() * (b - a);
+const TAU = Math.PI * 2;
+
+// --------------------------- Regeln ---------------------------
+
+// Die Welt ist so breit und hoch wie das Feld. Die kürzere Seite hat mindestens KURZE_SEITE Einheiten.
+const KURZE_SEITE = 480;
+let W = 480, H = 800;
+
+const SCHIFF_R = 11;           // Wie groß das Schiff für Treffer ist
+const DREHEN = 4.4;            // Drehung pro Sekunde (im Bogenmaß)
+const SCHUB = 430;             // Beschleunigung mit Schub
+const REIBUNG = 0.5;           // Das Schiff treibt langsam aus, wie im Original
+const HOECHST = 520;           // Höchstgeschwindigkeit
+const KUGEL_TEMPO = 620;
+const KUGEL_ZEIT = 0.95;       // So lange fliegt ein Schuss
+const DAUERFEUER = 0.2;        // Abstand der Schüsse beim Gedrückthalten
+const NEUES_LEBEN = 10000;
+
+// Groß, mittel, klein: Radius, Tempo, Punkte, Farbe
+const BROCKEN = {
+  3: { r: 44, v: [32, 64], punkte: 20, farbe: '#b45cff' },
+  2: { r: 23, v: [56, 110], punkte: 50, farbe: '#ff2bd6' },
+  1: { r: 12, v: [85, 160], punkte: 100, farbe: '#ff8a3d' }
+};
+const UFOS = {
+  gross: { r: 19, k: 1, tempo: 95, punkte: 200, schuss: 1.25 },
+  klein: { r: 11, k: 0.58, tempo: 135, punkte: 1000, schuss: 0.95 }
+};
+const F = { schiff: '#22e6ff', kugel: '#c9fbff', ufo: '#39ff14', ufoKugel: '#ff2244', flamme: '#ffd23d', weiss: '#ffffff' };
+
+const STUFEN = {
+  leicht: { name: 'Leicht', leben: 5, tempo: 0.75, schutz: 3.5, fehler: 0.5, kugeln: 6, ufoAb: 2, mehr: 0, sicher: true, text: '5 Leben, langsamere Brocken, länger Schutz und der Hyperraum landet immer sicher.' },
+  normal: { name: 'Normal', leben: 3, tempo: 1, schutz: 2.5, fehler: 0.22, kugeln: 4, ufoAb: 1, mehr: 0, sicher: false, text: 'Wie das klassische Spiel: 3 Leben und höchstens 4 Schüsse gleichzeitig.' },
+  schwer: { name: 'Schwer', leben: 3, tempo: 1.3, schutz: 1.6, fehler: 0.07, kugeln: 4, ufoAb: 1, mehr: 2, sicher: false, text: 'Mehr und schnellere Brocken, und die Ufos zielen fast genau.' }
+};
+const STUFEN_NAMEN = Object.keys(STUFEN);
+
+// Kürzester Weg über den Rand hinweg
+const ueberRand = (d, groesse) => d - groesse * Math.round(d / groesse);
+function abstand(a, b) {
+  return Math.hypot(ueberRand(b.x - a.x, W), ueberRand(b.y - a.y, H));
+}
+function umlaufen(o) {
+  if (o.x < 0) o.x += W; else if (o.x >= W) o.x -= W;
+  if (o.y < 0) o.y += H; else if (o.y >= H) o.y -= H;
+}
+
+// --------------------------- Speichern ---------------------------
+
+function ladeDaten() {
+  const leer = { name: '', stufe: 'normal', ton: true, freunde: [], rekorde: {} };
+  let roh = null;
+  try { roh = JSON.parse(localStorage.getItem(SPEICHER)); } catch (error) {}
+  const d = Object.assign(leer, roh && typeof roh === 'object' ? roh : {});
+  if (!Object.prototype.hasOwnProperty.call(STUFEN, d.stufe)) d.stufe = 'normal';
+  if (!Array.isArray(d.freunde)) d.freunde = [];
+  if (!d.rekorde || typeof d.rekorde !== 'object') d.rekorde = {};
+  for (const stufe of STUFEN_NAMEN) if (!Number.isFinite(d.rekorde[stufe])) d.rekorde[stufe] = 0;
+  return d;
+}
+const daten = ladeDaten();
+function speichere() {
+  try { localStorage.setItem(SPEICHER, JSON.stringify(daten)); } catch (error) {}
+}
+
+// --------------------------- Ton ---------------------------
+
+const ton = {
+  ctx: null, rauschen: null, schubLaut: null, ufoLaut: null, ufoTon: null, ufoWackler: null,
+  an() {
+    if (!this.ctx) {
+      const AudioClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioClass) return;
+      this.ctx = new AudioClass();
+      // Rauschen für Explosionen und das Triebwerk
+      const laenge = this.ctx.sampleRate;
+      this.rauschen = this.ctx.createBuffer(1, laenge, this.ctx.sampleRate);
+      const kanal = this.rauschen.getChannelData(0);
+      for (let i = 0; i < laenge; i++) kanal[i] = Math.random() * 2 - 1;
+      this.baueDauertoene();
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+  },
+  bereit() { return daten.ton && this.ctx && this.ctx.state === 'running'; },
+  baueDauertoene() {
+    const c = this.ctx;
+    // Triebwerk: tiefes, gefiltertes Rauschen
+    const quelle = c.createBufferSource();
+    quelle.buffer = this.rauschen;
+    quelle.loop = true;
+    const filter = c.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 420;
+    this.schubLaut = c.createGain();
+    this.schubLaut.gain.value = 0;
+    quelle.connect(filter).connect(this.schubLaut).connect(c.destination);
+    quelle.start();
+    // Ufo: ein auf und ab heulender Ton
+    this.ufoTon = c.createOscillator();
+    this.ufoTon.type = 'square';
+    this.ufoTon.frequency.value = 440;
+    this.ufoWackler = c.createOscillator();
+    this.ufoWackler.frequency.value = 5;
+    const tiefe = c.createGain();
+    tiefe.gain.value = 60;
+    this.ufoWackler.connect(tiefe).connect(this.ufoTon.frequency);
+    this.ufoLaut = c.createGain();
+    this.ufoLaut.gain.value = 0;
+    this.ufoTon.connect(this.ufoLaut).connect(c.destination);
+    this.ufoTon.start();
+    this.ufoWackler.start();
+  },
+  dauer(schub, ufo) {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const an = this.bereit();
+    this.schubLaut.gain.setTargetAtTime(an && schub ? 0.11 : 0, t, 0.03);
+    this.ufoLaut.gain.setTargetAtTime(an && ufo ? 0.016 : 0, t, 0.05);
+    if (ufo) {
+      this.ufoTon.frequency.setTargetAtTime(ufo === 'klein' ? 880 : 420, t, 0.05);
+      this.ufoWackler.frequency.setTargetAtTime(ufo === 'klein' ? 9 : 4.5, t, 0.05);
+    }
+  },
+  piep(frequenz, dauer, lautstaerke = 0.05, art = 'square', start = 0, ziel = 0) {
+    if (!this.bereit()) return;
+    const jetzt = this.ctx.currentTime + start;
+    const osc = this.ctx.createOscillator();
+    const hull = this.ctx.createGain();
+    osc.type = art;
+    osc.frequency.setValueAtTime(frequenz, jetzt);
+    if (ziel) osc.frequency.exponentialRampToValueAtTime(ziel, jetzt + dauer);
+    hull.gain.setValueAtTime(lautstaerke, jetzt);
+    hull.gain.exponentialRampToValueAtTime(0.0008, jetzt + dauer);
+    osc.connect(hull).connect(this.ctx.destination);
+    osc.start(jetzt);
+    osc.stop(jetzt + dauer + 0.02);
+  },
+  knall(dauer, lautstaerke, hoehe) {
+    if (!this.bereit()) return;
+    const c = this.ctx, jetzt = c.currentTime;
+    const quelle = c.createBufferSource();
+    quelle.buffer = this.rauschen;
+    const filter = c.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(hoehe, jetzt);
+    filter.frequency.exponentialRampToValueAtTime(80, jetzt + dauer);
+    const hull = c.createGain();
+    hull.gain.setValueAtTime(lautstaerke, jetzt);
+    hull.gain.exponentialRampToValueAtTime(0.0008, jetzt + dauer);
+    quelle.connect(filter).connect(hull).connect(c.destination);
+    quelle.start(jetzt, Math.random() * 0.5);
+    quelle.stop(jetzt + dauer + 0.05);
+  },
+  schuss() { this.piep(1500, 0.09, 0.035, 'square', 0, 320); },
+  ufoSchuss() { this.piep(900, 0.12, 0.025, 'sawtooth', 0, 500); },
+  brocken(g) { this.knall(0.18 + g * 0.12, 0.16 + g * 0.06, 2600 - g * 600); },
+  schiffWeg() { this.knall(1.1, 0.35, 1800); this.piep(160, 0.7, 0.07, 'sawtooth', 0, 40); },
+  herz(hoch) { this.piep(hoch ? 62 : 54, 0.13, 0.22, 'triangle'); },
+  hyper() { this.piep(220, 0.32, 0.05, 'sine', 0, 1800); },
+  leben() { [784, 988, 1175, 1568].forEach((f, i) => this.piep(f, 0.12, 0.05, 'square', i * 0.07)); },
+  welle() { [392, 523, 659].forEach((f, i) => this.piep(f, 0.14, 0.04, 'triangle', i * 0.09)); },
+  ueberholt() { [659, 880, 1175].forEach((f, i) => this.piep(f, 0.12, 0.06, 'triangle', i * 0.08)); },
+  klick() { this.piep(880, 0.06, 0.05, 'square'); }
+};
+
+// --------------------------- Spielzustand ---------------------------
+
+let s = null;
+const eingabe = { links: false, rechts: false, schub: false, feuer: false };
+
+function neuesSchiff() {
+  return { x: W / 2, y: H / 2, vx: 0, vy: 0, a: -Math.PI / 2, schutz: STUFEN[daten.stufe].schutz, weg: 0, flackern: 0 };
+}
+
+function neuesSpiel() {
+  const st = STUFEN[daten.stufe];
+  s = {
+    phase: 'lauf', punkte: 0, leben: st.leben, welle: 0, abgeschossen: 0, naechstesLeben: NEUES_LEBEN,
+    schiff: null, brocken: [], kugeln: [], ufo: null, teilchen: [], truemmer: [], schrift: [],
+    welleZeit: 0, wellePause: -1, ufoUhr: 0, herzUhr: 1, herzHoch: false, wiederUhr: 0, hyperUhr: 0,
+    autoUhr: 0, schussWunsch: false, hyperWunsch: false,
+    banner: '', bannerUhr: 0, wackeln: 0, endeUhr: 0, endeGezeigt: false, neuerRekord: false, ueberholt: false, ursache: ''
+  };
+  s.schiff = neuesSchiff();
+  naechsteWelle();
+}
+
+function neuerBrocken(x, y, g, vx = 0, vy = 0) {
+  const art = BROCKEN[g];
+  const tempo = zufall(art.v[0], art.v[1]) * STUFEN[daten.stufe].tempo * (1 + Math.min(0.5, (s.welle - 1) * 0.05));
+  const w = Math.random() * TAU;
+  // Unregelmäßige Kanten, damit jeder Brocken anders aussieht
+  const ecken = 9 + Math.floor(Math.random() * 4);
+  const form = new Path2D();
+  for (let i = 0; i < ecken; i++) {
+    const winkel = (i / ecken) * TAU + zufall(-0.18, 0.18);
+    const r = art.r * zufall(0.72, 1.08);
+    if (i) form.lineTo(Math.cos(winkel) * r, Math.sin(winkel) * r);
+    else form.moveTo(Math.cos(winkel) * r, Math.sin(winkel) * r);
+  }
+  form.closePath();
+  return { x, y, g, r: art.r, vx: vx + Math.cos(w) * tempo, vy: vy + Math.sin(w) * tempo, a: Math.random() * TAU, va: zufall(-1.2, 1.2) * (4 - g) * 0.5, form };
+}
+
+// Ufos kommen mit jeder Welle etwas öfter, aber nicht ohne Ende
+const ufoTakt = () => 1 + 0.08 * Math.min(8, s.welle - 1);
+
+function naechsteWelle() {
+  const st = STUFEN[daten.stufe];
+  s.welle++;
+  s.welleZeit = 0;
+  s.wellePause = -1;
+  s.herzUhr = 1;
+  const anzahl = Math.min(11 + st.mehr, 2 + 2 * s.welle + st.mehr);
+  const mitte = s.schiff || { x: W / 2, y: H / 2 };
+  for (let i = 0; i < anzahl; i++) {
+    // Brocken kommen vom Rand, nie direkt auf dem Schiff
+    let p = null;
+    for (let versuch = 0; versuch < 60; versuch++) {
+      const amRand = Math.random() < 0.5;
+      const q = amRand ? { x: Math.random() * W, y: Math.random() < 0.5 ? zufall(0, 40) : H - zufall(0, 40) }
+                       : { x: Math.random() < 0.5 ? zufall(0, 40) : W - zufall(0, 40), y: Math.random() * H };
+      if (abstand(q, mitte) > Math.min(W, H) * 0.38) { p = q; break; }
+    }
+    if (!p) p = { x: 0, y: 0 };
+    s.brocken.push(neuerBrocken(p.x, p.y, 3));
+  }
+  s.ufoUhr = zufall(13, 21) / ufoTakt();
+  s.banner = 'WELLE ' + s.welle;
+  s.bannerUhr = 2;
+  if (s.welle > 1) ton.welle();
+}
+
+// --------------------------- Aktionen ---------------------------
+
+function schiesse() {
+  const sch = s.schiff;
+  const eigene = s.kugeln.filter(k => !k.feind).length;
+  if (!sch || sch.weg > 0 || eigene >= STUFEN[daten.stufe].kugeln) return false;
+  const cx = Math.cos(sch.a), cy = Math.sin(sch.a);
+  s.kugeln.push({ x: sch.x + cx * 15, y: sch.y + cy * 15, vx: sch.vx + cx * KUGEL_TEMPO, vy: sch.vy + cy * KUGEL_TEMPO, t: KUGEL_ZEIT, feind: false });
+  ton.schuss();
+  return true;
+}
+
+function hyperraum() {
+  const sch = s.schiff;
+  if (!sch || sch.weg > 0 || s.hyperUhr > 0) return;
+  funken(sch.x, sch.y, [F.schiff, F.weiss], 14, 140);
+  let ziel = { x: zufall(30, W - 30), y: zufall(30, H - 30) };
+  if (STUFEN[daten.stufe].sicher) {
+    for (let i = 0; i < 40; i++) {
+      const q = { x: zufall(30, W - 30), y: zufall(30, H - 30) };
+      if (s.brocken.every(b => abstand(b, q) > b.r + 90)) { ziel = q; break; }
+    }
+  }
+  sch.x = ziel.x; sch.y = ziel.y; sch.vx = 0; sch.vy = 0;
+  sch.weg = 0.45;
+  s.hyperUhr = 1;
+  ton.hyper();
+}
+
+function punkteDazu(n, x, y, farbe) {
+  const vorher = s.punkte;
+  s.punkte += n;
+  s.schrift.push({ text: '+' + n, x, y: y - 10, t: 0.6, farbe });
+  while (s.punkte >= s.naechstesLeben) {
+    s.naechstesLeben += NEUES_LEBEN;
+    s.leben++;
+    ton.leben();
+    s.schrift.push({ text: '+1 LEBEN', x: W / 2, y: H * 0.3, t: 1.6, farbe: F.schiff, gross: true });
+  }
+  if (offenesDuell && !s.ueberholt && daten.stufe === offenesDuell.stufe && vorher <= offenesDuell.punkte && s.punkte > offenesDuell.punkte) {
+    s.ueberholt = true;
+    ton.ueberholt();
+    s.schrift.push({ text: offenesDuell.name + ' ÜBERHOLT!', x: W / 2, y: H * 0.36, t: 2, farbe: F.ufo, gross: true });
+  }
+}
+
+function funken(x, y, farben, anzahl, tempo = 120) {
+  for (let i = 0; i < anzahl; i++) {
+    const w = Math.random() * TAU, v = zufall(0.3, 1) * tempo;
+    s.teilchen.push({ x, y, vx: Math.cos(w) * v, vy: Math.sin(w) * v, t: zufall(0.35, 0.8), c: farben[i % farben.length] });
+  }
+}
+
+// Ein Brocken wird getroffen: Er zerfällt in zwei kleinere
+function zerlege(i, mitPunkten) {
+  const b = s.brocken[i];
+  s.brocken.splice(i, 1);
+  const art = BROCKEN[b.g];
+  funken(b.x, b.y, [art.farbe, F.weiss], 6 + b.g * 5, 70 + b.g * 30);
+  ton.brocken(b.g);
+  if (mitPunkten) {
+    s.abgeschossen++;
+    punkteDazu(art.punkte, b.x, b.y, art.farbe);
+  }
+  if (b.g > 1) {
+    for (let k = 0; k < 2; k++) s.brocken.push(neuerBrocken(b.x, b.y, b.g - 1, b.vx * 0.5, b.vy * 0.5));
+  }
+}
+
+function ufoWeg(mitPunkten) {
+  const u = s.ufo;
+  funken(u.x, u.y, [F.ufo, F.weiss, F.ufoKugel], 22, 170);
+  ton.brocken(3);
+  if (mitPunkten) punkteDazu(UFOS[u.art].punkte, u.x, u.y, F.ufo);
+  s.ufo = null;
+  s.ufoUhr = zufall(10, 18) / ufoTakt();
+}
+
+// Die Linien des Schiffs fliegen auseinander
+const SCHIFF_LINIEN = [[15, 0, -11, -10], [-11, -10, -6, 0], [-6, 0, -11, 10], [-11, 10, 15, 0]];
+function schiffWeg(ursache) {
+  const sch = s.schiff;
+  const c = Math.cos(sch.a), si = Math.sin(sch.a);
+  for (const [x1, y1, x2, y2] of SCHIFF_LINIEN) {
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = Math.atan2(my, mx), v = zufall(30, 90);
+    s.truemmer.push({
+      x: sch.x + mx * c - my * si, y: sch.y + mx * si + my * c,
+      vx: sch.vx * 0.3 + Math.cos(w + sch.a) * v, vy: sch.vy * 0.3 + Math.sin(w + sch.a) * v,
+      a: sch.a + Math.atan2(y2 - y1, x2 - x1), va: zufall(-3, 3), laenge: Math.hypot(x2 - x1, y2 - y1), t: 1.6
+    });
+  }
+  funken(sch.x, sch.y, [F.schiff, F.weiss, F.flamme], 26, 160);
+  ton.schiffWeg();
+  s.wackeln = 0.35;
+  s.schiff = null;
+  s.leben--;
+  s.ursache = ursache;
+  if (s.leben <= 0) {
+    s.phase = 'aus';
+    s.endeUhr = 0;
+    merkeRekord();
+  } else {
+    s.wiederUhr = 2;
+  }
+}
+
+// --------------------------- Zeit ---------------------------
+
+function rechne(dt) {
+  const st = STUFEN[daten.stufe];
+
+  // Funken, Trümmer, Schrift
+  for (let i = s.teilchen.length - 1; i >= 0; i--) {
+    const t = s.teilchen[i];
+    t.t -= dt;
+    if (t.t <= 0) { s.teilchen.splice(i, 1); continue; }
+    t.x += t.vx * dt; t.y += t.vy * dt;
+    t.vx *= 0.985; t.vy *= 0.985;
+  }
+  for (let i = s.truemmer.length - 1; i >= 0; i--) {
+    const t = s.truemmer[i];
+    t.t -= dt;
+    if (t.t <= 0) { s.truemmer.splice(i, 1); continue; }
+    t.x += t.vx * dt; t.y += t.vy * dt; t.a += t.va * dt;
+  }
+  for (let i = s.schrift.length - 1; i >= 0; i--) {
+    const t = s.schrift[i];
+    t.t -= dt;
+    t.y -= (t.gross ? 12 : 30) * dt;
+    if (t.t <= 0) s.schrift.splice(i, 1);
+  }
+  if (s.wackeln > 0) s.wackeln -= dt;
+  if (s.bannerUhr > 0) s.bannerUhr -= dt;
+  if (s.hyperUhr > 0) s.hyperUhr -= dt;
+
+  // Schiff
+  const sch = s.schiff;
+  if (sch) {
+    if (sch.weg > 0) {
+      sch.weg -= dt;
+      sch.schub = false;
+    } else {
+      sch.a += ((eingabe.rechts ? 1 : 0) - (eingabe.links ? 1 : 0)) * DREHEN * dt;
+      sch.schub = eingabe.schub;
+      if (sch.schub) {
+        sch.vx += Math.cos(sch.a) * SCHUB * dt;
+        sch.vy += Math.sin(sch.a) * SCHUB * dt;
+      }
+      const reib = Math.exp(-REIBUNG * dt);
+      sch.vx *= reib; sch.vy *= reib;
+      const v = Math.hypot(sch.vx, sch.vy);
+      if (v > HOECHST) { sch.vx *= HOECHST / v; sch.vy *= HOECHST / v; }
+      sch.x += sch.vx * dt; sch.y += sch.vy * dt;
+      umlaufen(sch);
+      if (sch.schutz > 0) sch.schutz -= dt;
+      s.autoUhr -= dt;
+      if (s.schussWunsch || (eingabe.feuer && s.autoUhr <= 0)) {
+        if (schiesse()) s.autoUhr = DAUERFEUER;
+      }
+      if (s.hyperWunsch) hyperraum();
+    }
+  } else if (s.phase === 'lauf') {
+    // Neues Schiff, sobald die Mitte frei ist (spätestens nach ein paar Sekunden, dann mit Schutz)
+    s.wiederUhr -= dt;
+    const mitte = { x: W / 2, y: H / 2 };
+    const frei = s.brocken.every(b => abstand(b, mitte) > b.r + 80) && (!s.ufo || abstand(s.ufo, mitte) > 120);
+    if (s.wiederUhr <= 0 && (frei || s.wiederUhr < -3)) {
+      s.schiff = neuesSchiff();
+      s.autoUhr = 0.3;
+    }
+  }
+  s.schussWunsch = false;
+  s.hyperWunsch = false;
+
+  // Brocken
+  for (const b of s.brocken) {
+    b.x += b.vx * dt; b.y += b.vy * dt; b.a += b.va * dt;
+    umlaufen(b);
+  }
+
+  // Schüsse
+  for (let i = s.kugeln.length - 1; i >= 0; i--) {
+    const k = s.kugeln[i];
+    k.t -= dt;
+    if (k.t <= 0) { s.kugeln.splice(i, 1); continue; }
+    k.x += k.vx * dt; k.y += k.vy * dt;
+    umlaufen(k);
+  }
+
+  // Ufo
+  if (!s.ufo && s.phase === 'lauf' && s.welle >= st.ufoAb && s.wellePause < 0) {
+    s.ufoUhr -= dt;
+    if (s.ufoUhr <= 0) {
+      const kleinChance = s.punkte >= 10000 ? 0.75 : s.punkte >= 4000 ? 0.35 : s.welle >= 3 ? 0.15 : 0;
+      const art = Math.random() < kleinChance ? 'klein' : 'gross';
+      const vonLinks = Math.random() < 0.5;
+      const u = UFOS[art];
+      s.ufo = { art, r: u.r, x: vonLinks ? 0 : W - 0.01, y: zufall(H * 0.12, H * 0.88), vx: (vonLinks ? 1 : -1) * u.tempo * Math.min(1.25, st.tempo), vy: 0, strecke: 0, kursUhr: zufall(0.8, 1.6), schussUhr: 1 };
+    }
+  }
+  const u = s.ufo;
+  if (u) {
+    u.x += u.vx * dt; u.y += u.vy * dt;
+    u.strecke += Math.abs(u.vx * dt);
+    umlaufen(u);
+    u.kursUhr -= dt;
+    if (u.kursUhr <= 0) {
+      u.kursUhr = zufall(0.8, 1.8);
+      u.vy = [-1, 0, 1][Math.floor(Math.random() * 3)] * Math.abs(u.vx) * 0.6;
+    }
+    u.schussUhr -= dt;
+    if (u.schussUhr <= 0 && s.phase === 'lauf') {
+      u.schussUhr = UFOS[u.art].schuss;
+      let w = Math.random() * TAU;
+      const ziel = s.schiff && s.schiff.weg <= 0 ? s.schiff : null;
+      if (ziel && (u.art === 'klein' || Math.random() < 0.25)) {
+        w = Math.atan2(ueberRand(ziel.y - u.y, H), ueberRand(ziel.x - u.x, W)) + zufall(-1, 1) * (u.art === 'klein' ? st.fehler : st.fehler * 2.5);
+      }
+      s.kugeln.push({ x: u.x + Math.cos(w) * (u.r + 4), y: u.y + Math.sin(w) * (u.r + 4), vx: Math.cos(w) * 330, vy: Math.sin(w) * 330, t: 1.5, feind: true });
+      ton.ufoSchuss();
+    }
+    // Einmal quer über das Feld, dann ist es weg
+    if (u.strecke > W + 20) { s.ufo = null; s.ufoUhr = zufall(10, 18) / ufoTakt(); }
+  }
+
+  treffer();
+
+  // Welle geschafft
+  if (s.phase === 'lauf') {
+    s.welleZeit += dt;
+    if (!s.brocken.length && s.wellePause < 0) s.wellePause = 2.2;
+    if (s.wellePause >= 0) {
+      s.wellePause -= dt;
+      if (s.wellePause < 0) naechsteWelle();
+    }
+    // Der Herzschlag aus dem Original: wird mit der Zeit immer schneller
+    if (s.schiff && s.brocken.length) {
+      s.herzUhr -= dt;
+      if (s.herzUhr <= 0) {
+        s.herzHoch = !s.herzHoch;
+        ton.herz(s.herzHoch);
+        s.herzUhr = Math.max(0.26, 1.0 - s.welleZeit * 0.012);
+      }
+    }
+  } else if (s.phase === 'aus') {
+    s.endeUhr += dt;
+    if (s.endeUhr > 2.2 && !s.endeGezeigt) {
+      s.endeGezeigt = true;
+      zeigeEnde();
+    }
+  }
+}
+
+function beruehrt(a, b, ra, rb) {
+  return abstand(a, b) < ra + rb;
+}
+
+function treffer() {
+  const sch = s.schiff;
+  const verwundbar = sch && sch.weg <= 0 && sch.schutz <= 0;
+
+  for (let i = s.kugeln.length - 1; i >= 0; i--) {
+    const k = s.kugeln[i];
+    let weg = false;
+    for (let j = s.brocken.length - 1; j >= 0; j--) {
+      const b = s.brocken[j];
+      if (beruehrt(k, b, 2, b.r * 0.95)) { zerlege(j, !k.feind); weg = true; break; }
+    }
+    if (!weg && !k.feind && s.ufo && beruehrt(k, s.ufo, 2, s.ufo.r)) { ufoWeg(true); weg = true; }
+    if (!weg && k.feind && verwundbar && s.schiff && beruehrt(k, s.schiff, 2, SCHIFF_R - 1)) { schiffWeg('ufo'); weg = true; }
+    if (weg) s.kugeln.splice(i, 1);
+  }
+
+  if (verwundbar && s.schiff) {
+    for (let j = s.brocken.length - 1; j >= 0; j--) {
+      const b = s.brocken[j];
+      if (beruehrt(s.schiff, b, SCHIFF_R, b.r * 0.88)) { zerlege(j, true); schiffWeg('brocken'); break; }
+    }
+  }
+  if (s.ufo && verwundbar && s.schiff && beruehrt(s.schiff, s.ufo, SCHIFF_R, s.ufo.r)) { ufoWeg(true); schiffWeg('ufo'); }
+  if (s.ufo) {
+    for (let j = s.brocken.length - 1; j >= 0; j--) {
+      const b = s.brocken[j];
+      if (beruehrt(s.ufo, b, s.ufo.r, b.r * 0.9)) { zerlege(j, false); ufoWeg(false); break; }
+    }
+  }
+}
+
+// --------------------------- Spielablauf ---------------------------
+
+function starte() {
+  ton.an();
+  neuesSpiel();
+  hudStand = '';
+  schliesseFenster();
+}
+
+function merkeRekord() {
+  if (s.punkte > daten.rekorde[daten.stufe]) {
+    daten.rekorde[daten.stufe] = s.punkte;
+    s.neuerRekord = true;
+  }
+  speichere();
+}
+
+const SPRUECHE = {
+  brocken: ['Der Brocken war härter als dein Schiff.', 'Im All gibt es keine Bremsen.', 'Ein Brocken zu viel.', 'Die Brocken waren diesmal schneller.'],
+  ufo: ['Das Ufo hat dich erwischt.', 'Grüne Männchen, roter Schuss.', 'Das Ufo hat besser gezielt.']
+};
+
+function zeigeEnde() {
+  const sprueche = SPRUECHE[s.ursache] || SPRUECHE.brocken;
+  $('eSpruch').textContent = sprueche[Math.floor(Math.random() * sprueche.length)];
+  $('neuerRekord').hidden = !s.neuerRekord;
+  $('ePunkte').textContent = zahl(s.punkte);
+  $('eWelle').textContent = s.welle;
+  $('eBrocken').textContent = zahl(s.abgeschossen);
+  $('eRekord').textContent = zahl(daten.rekorde[daten.stufe]);
+  const d = offenesDuell;
+  $('eDuell').hidden = !d || d.stufe !== daten.stufe;
+  if (d && d.stufe === daten.stufe) {
+    $('eDuell').textContent = s.punkte > d.punkte
+      ? 'Du hast ' + d.name + ' geschlagen!'
+      : 'Noch ' + zahl(d.punkte - s.punkte + 1) + ' Punkte bis ' + d.name + '.';
+  }
+  zeigeFenster('fEnde');
+}
+
+function pausiere() {
+  if (s.phase !== 'lauf' || !$('fenster').hidden) return;
+  $('pausePunkte').textContent = zahl(s.punkte);
+  zeigeFenster('fPause');
+}
+
+function weiter() {
+  schliesseFenster();
+}
+
+function zumMenue() {
+  if (s.phase === 'lauf') merkeRekord();
+  neuesSpiel();
+  s.phase = 'menue';
+  s.schiff = null;
+  s.bannerUhr = 0;
+  hudStand = '';
+  zeigeFenster('fStart');
+}
+
+// --------------------------- Zeichnen ---------------------------
+
+const body = document.body;
+const leinwand = $('bild');
+const pinsel = leinwand.getContext('2d');
+const hintergrund = document.createElement('canvas');
+let massstab = 1;   // Echte Bildpunkte pro Spiel-Einheit
+
+const wenigBewegung = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tippGeraet = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+if (tippGeraet) body.classList.add('tipp');
+const SCHRIFT_RETRO = "'Press Start 2P', 'Courier New', monospace";
+const SCHRIFT_TEXT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
+function schreibe(c, text, x, y, farbe, groesse = 16, retro = false) {
+  c.font = (retro ? '' : '700 ') + groesse + 'px ' + (retro ? SCHRIFT_RETRO : SCHRIFT_TEXT);
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillStyle = farbe;
+  c.fillText(text, x, y);
+}
+
+// Leuchtende Umrisse wie auf einem alten Vektor-Bildschirm: weicher Schein, kräftige Linie, heller Kern
+function neon(c, pfad, farbe, breite = 1.8) {
+  c.lineJoin = 'round';
+  c.lineCap = 'round';
+  c.strokeStyle = farbe;
+  c.globalAlpha = 0.12; c.lineWidth = breite * 6; c.stroke(pfad);
+  c.globalAlpha = 0.28; c.lineWidth = breite * 3; c.stroke(pfad);
+  c.globalAlpha = 1; c.lineWidth = breite; c.stroke(pfad);
+  c.strokeStyle = '#ffffff'; c.globalAlpha = 0.6; c.lineWidth = breite * 0.4; c.stroke(pfad);
+  c.globalAlpha = 1;
+}
+
+function leuchtPunkt(c, x, y, r, farbe) {
+  c.fillStyle = farbe;
+  c.globalAlpha = 0.18; c.beginPath(); c.arc(x, y, r * 3, 0, TAU); c.fill();
+  c.globalAlpha = 0.4; c.beginPath(); c.arc(x, y, r * 1.8, 0, TAU); c.fill();
+  c.globalAlpha = 1; c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
+}
+
+// Was am Rand steht, wird auch auf der anderen Seite gezeichnet, damit nichts plötzlich springt
+function anAllenSeiten(o, r, male) {
+  const xs = [o.x], ys = [o.y];
+  if (o.x < r) xs.push(o.x + W); else if (o.x > W - r) xs.push(o.x - W);
+  if (o.y < r) ys.push(o.y + H); else if (o.y > H - r) ys.push(o.y - H);
+  for (const x of xs) for (const y of ys) male(x, y);
+}
+
+const SCHIFF_PFAD = new Path2D('M15 0 L-11 -10 L-6 0 L-11 10 Z');
+function zeichneSchiff(c, x, y, a, opt = {}) {
+  c.save();
+  c.translate(x, y);
+  c.rotate(a);
+  if (opt.schub) {
+    const lang = 17 + Math.random() * 9;
+    const flamme = new Path2D('M-8 -5 L' + (-lang) + ' 0 L-8 5');
+    neon(c, flamme, F.flamme, 1.6);
+  }
+  neon(c, SCHIFF_PFAD, F.schiff, 2);
+  if (opt.schutz) {
+    c.globalAlpha = 0.35 + 0.25 * Math.sin(performance.now() / 90);
+    c.strokeStyle = F.schiff;
+    c.lineWidth = 1.2;
+    c.beginPath(); c.arc(0, 0, 22, 0, TAU); c.stroke();
+    c.globalAlpha = 1;
+  }
+  c.restore();
+}
+
+const UFO_PFAD = new Path2D('M-22 0 L-9 -7 L9 -7 L22 0 L9 8 L-9 8 Z M-22 0 L22 0 M-9 -7 L-5 -13 L5 -13 L9 -7');
+function zeichneUfo(c, x, y, k) {
+  c.save();
+  c.translate(x, y);
+  c.scale(k, k);
+  neon(c, UFO_PFAD, F.ufo, 1.9 / Math.max(k, 0.75));
+  c.restore();
+}
+
+function zeichneBrocken(c, b, x, y) {
+  c.save();
+  c.translate(x, y);
+  c.rotate(b.a);
+  neon(c, b.form, BROCKEN[b.g].farbe, b.g === 1 ? 1.6 : 1.9);
+  c.restore();
+}
+
+function baueHintergrund() {
+  if (!leinwand.width) return;
+  hintergrund.width = leinwand.width;
+  hintergrund.height = leinwand.height;
+  const c = hintergrund.getContext('2d');
+  c.fillStyle = '#000';
+  c.fillRect(0, 0, hintergrund.width, hintergrund.height);
+  // Ein paar sehr schwache Sterne, der Hintergrund bleibt schwarz und ruhig
+  c.setTransform(massstab, 0, 0, massstab, 0, 0);
+  let saat = 7;
+  const r = () => { saat = (saat * 16807) % 2147483647; return saat / 2147483647; };
+  const anzahl = Math.round(W * H / 5200);
+  for (let i = 0; i < anzahl; i++) {
+    c.globalAlpha = 0.1 + r() * 0.28;
+    c.fillStyle = r() < 0.15 ? '#9fdcff' : '#ffffff';
+    c.beginPath(); c.arc(r() * W, r() * H, 0.5 + r() * 0.8, 0, TAU); c.fill();
+  }
+  c.globalAlpha = 1;
+}
+
+function zeichne() {
+  const c = pinsel;
+  const zeit = performance.now() / 1000;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.globalAlpha = 1;
+  c.drawImage(hintergrund, 0, 0);
+  let wx = 0, wy = 0;
+  if (s.wackeln > 0 && !wenigBewegung) { wx = (Math.random() - 0.5) * 8 * s.wackeln * 3; wy = (Math.random() - 0.5) * 8 * s.wackeln * 3; }
+  c.setTransform(massstab, 0, 0, massstab, wx * massstab, wy * massstab);
+
+  for (const b of s.brocken) anAllenSeiten(b, b.r + 8, (x, y) => zeichneBrocken(c, b, x, y));
+  if (s.ufo) anAllenSeiten(s.ufo, 30, (x, y) => zeichneUfo(c, x, y, UFOS[s.ufo.art].k));
+  for (const k of s.kugeln) leuchtPunkt(c, k.x, k.y, k.feind ? 2.2 : 2, k.feind ? F.ufoKugel : F.kugel);
+
+  const sch = s.schiff;
+  if (sch && sch.weg <= 0) {
+    // Mit Schutz blinkt das Schiff, damit man sieht: Jetzt kann dir nichts passieren
+    const blinkt = sch.schutz > 0 && Math.floor(zeit * 8) % 2 === 0;
+    if (!blinkt || sch.schutz <= 0) {
+      anAllenSeiten(sch, 24, (x, y) => zeichneSchiff(c, x, y, sch.a, { schub: sch.schub && Math.random() > 0.15, schutz: sch.schutz > 0 }));
+    }
+  } else if (sch && sch.weg > 0) {
+    // Hyperraum: das Schiff taucht als Lichtpunkt wieder auf
+    const f = 1 - sch.weg / 0.45;
+    c.globalAlpha = f;
+    leuchtPunkt(c, sch.x, sch.y, 2 + f * 3, F.schiff);
+    c.globalAlpha = 1;
+  }
+
+  for (const t of s.truemmer) {
+    c.save();
+    c.translate(t.x, t.y);
+    c.rotate(t.a);
+    c.globalAlpha = Math.min(1, t.t);
+    const p = new Path2D();
+    p.moveTo(-t.laenge / 2, 0); p.lineTo(t.laenge / 2, 0);
+    neon(c, p, F.schiff, 1.8);
+    c.restore();
+  }
+  for (const t of s.teilchen) {
+    c.globalAlpha = Math.min(1, t.t * 2);
+    c.fillStyle = t.c;
+    c.beginPath(); c.arc(t.x, t.y, 1.5, 0, TAU); c.fill();
+    c.globalAlpha = Math.min(1, t.t * 2) * 0.25;
+    c.beginPath(); c.arc(t.x, t.y, 4, 0, TAU); c.fill();
+  }
+  c.globalAlpha = 1;
+  for (const t of s.schrift) {
+    c.globalAlpha = Math.min(1, t.t * 3);
+    if (t.gross) schreibe(c, t.text, W / 2, t.y, t.farbe, 15, true);
+    else schreibe(c, t.text, begrenzt(t.x, 30, W - 30), begrenzt(t.y, 20, H - 20), t.farbe, 14);
+  }
+  c.globalAlpha = 1;
+
+  // Ansage der neuen Welle
+  if (s.bannerUhr > 0 && s.banner) {
+    const alpha = Math.min(1, s.bannerUhr * 1.5);
+    c.globalAlpha = alpha;
+    c.shadowColor = F.schiff;
+    c.shadowBlur = 16 * massstab;
+    schreibe(c, s.banner, W / 2, H / 2 - 60, F.schiff, 24, true);
+    c.shadowBlur = 0;
+    if (s.welle === 1) schreibe(c, tippGeraet ? 'Links drehen, rechts Schub und Feuer' : 'Pfeile lenken, Leertaste schießt', W / 2, H / 2 + 62, '#cfe9f5', 15);
+    c.globalAlpha = 1;
+  }
+}
+
+// Das Feld füllt den ganzen Platz aus und wird in voller Bildschirmauflösung gezeichnet
+function passeGroesseAn() {
+  const buehne = $('buehne');
+  const verhaeltnis = Math.min(3, window.devicePixelRatio || 1);
+  const breite = Math.max(60, buehne.clientWidth), hoehe = Math.max(60, buehne.clientHeight);
+  const einheit = Math.min(breite, hoehe) / Math.max(KURZE_SEITE, Math.min(breite, hoehe) / 1.7);
+  const altW = W, altH = H;
+  W = breite / einheit;
+  H = hoehe / einheit;
+  leinwand.width = Math.round(breite * verhaeltnis);
+  leinwand.height = Math.round(hoehe * verhaeltnis);
+  massstab = leinwand.width / W;
+  // Alles bleibt an derselben Stelle im Verhältnis zum Feld
+  if (s && (altW !== W || altH !== H)) {
+    const verschiebe = o => { if (o) { o.x = o.x / altW * W; o.y = o.y / altH * H; umlaufen(o); } };
+    [s.schiff, s.ufo, ...s.brocken, ...s.kugeln].forEach(verschiebe);
+  }
+  baueHintergrund();
+}
+
+let hudStand = '';
+function zeichneHud() {
+  const leben = s.phase === 'menue' ? STUFEN[daten.stufe].leben : Math.max(0, s.leben - (s.schiff ? 1 : 0));
+  const stand = s.punkte + '|' + s.welle + '|' + leben;
+  if (stand === hudStand) return;
+  hudStand = stand;
+  $('punkte').textContent = zahl(s.punkte);
+  $('welleAnzeige').textContent = Math.max(1, s.welle);
+  // Reserveschiffe als kleine Symbole
+  const box = $('leben');
+  box.textContent = '';
+  for (let i = 0; i < Math.min(leben, 5); i++) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 26');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#schiff');
+    svg.appendChild(use);
+    box.appendChild(svg);
+  }
+  if (leben > 5) box.appendChild(document.createTextNode('+' + (leben - 5)));
+  if (leben === 0) box.textContent = '–';
+  box.setAttribute('aria-label', leben + ' Reserveschiffe');
+}
+
+// --------------------------- Fenster ---------------------------
+
+const FENSTER_IDS = ['fStart', 'fListe', 'fHilfe', 'fPause', 'fEnde', 'fTeilen'];
+const ERSTER_KNOPF = { fStart: 'losKnopf', fPause: 'weiterKnopf', fEnde: 'nochmalKnopf' };
+
+function zeigeFenster(id) {
+  for (const f of FENSTER_IDS) $(f).hidden = f !== id;
+  $('fenster').hidden = false;
+  $('fenster').scrollTop = 0;
+  body.classList.remove('imSpiel');
+  loslassen();
+  if (id === 'fStart') baueStart();
+  if (id === 'fListe') baueListe();
+  if (id === 'fHilfe') baueHilfe();
+  baueStufen();
+  if (ERSTER_KNOPF[id] && !tippGeraet) $(ERSTER_KNOPF[id]).focus({ preventScroll: true });
+}
+
+function schliesseFenster() {
+  $('fenster').hidden = true;
+  body.classList.add('imSpiel');
+  loslassen();
+  if (document.activeElement) document.activeElement.blur();
+}
+
+function baueStufen() {
+  for (const gruppe of document.querySelectorAll('.stufen')) {
+    gruppe.textContent = '';
+    for (const name of STUFEN_NAMEN) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = STUFEN[name].name;
+      b.setAttribute('aria-pressed', String(name === daten.stufe));
+      b.addEventListener('click', () => {
+        daten.stufe = name;
+        speichere();
+        hudStand = '';
+        zeigeFenster(FENSTER_IDS.find(f => !$(f).hidden));
+      });
+      gruppe.appendChild(b);
+    }
+  }
+  for (const t of document.querySelectorAll('.js-stufentext')) t.textContent = STUFEN[daten.stufe].text;
+  for (const t of document.querySelectorAll('.js-rekord')) t.textContent = zahl(daten.rekorde[daten.stufe]);
+}
+
+function baueStart() {
+  const d = offenesDuell;
+  $('duell').hidden = !d;
+  if (d) {
+    $('duellTitel').textContent = d.name + ' FORDERT DICH HERAUS';
+    $('duellText').textContent = 'Schlage ' + zahl(d.punkte) + ' Punkte auf Stufe ' + STUFEN[d.stufe].name + '.';
+  }
+  // Kleines Bild neben dem Titel: Schiff, Schuss und Brocken
+  const leinw = $('startBild');
+  const c = leinw.getContext('2d');
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.clearRect(0, 0, leinw.width, leinw.height);
+  const k = leinw.width / 84;
+  c.setTransform(k, 0, 0, k, 0, 0);
+  zeichneSchiff(c, 16, 40, -0.45);
+  leuchtPunkt(c, 37, 29, 1.6, F.kugel);
+  c.save(); c.translate(64, 24); c.scale(0.78, 0.78); zeichneBrocken(c, startBrocken, 0, 0); c.restore();
+}
+let startBrocken = null;
+
+function baueListe() {
+  const liste = $('liste');
+  liste.textContent = '';
+  const zeilen = daten.freunde.filter(x => x.stufe === daten.stufe).map(x => ({ name: x.name, punkte: x.punkte, ich: false }));
+  zeilen.push({ name: daten.name || 'Du', punkte: daten.rekorde[daten.stufe], ich: true });
+  zeilen.sort((a, b) => b.punkte - a.punkte);
+  zeilen.forEach((z, i) => {
+    const li = document.createElement('li');
+    if (z.ich) li.className = 'ich';
+    const platz = document.createElement('span');
+    platz.className = 'platz';
+    platz.textContent = i + 1;
+    const wer = document.createElement('span');
+    wer.className = 'wer';
+    wer.textContent = z.name;
+    const wie = document.createElement('span');
+    wie.className = 'wie';
+    wie.textContent = zahl(z.punkte);
+    li.append(platz, wer, wie);
+    if (z.ich) {
+      const leer = document.createElement('span');
+      leer.className = 'platzhalter';
+      li.appendChild(leer);
+    } else {
+      const weg = document.createElement('button');
+      weg.type = 'button';
+      weg.className = 'weg';
+      weg.setAttribute('aria-label', z.name + ' entfernen');
+      weg.textContent = '×';
+      weg.addEventListener('click', () => {
+        daten.freunde = daten.freunde.filter(x => !(x.name === z.name && x.stufe === daten.stufe));
+        speichere();
+        baueListe();
+      });
+      li.appendChild(weg);
+    }
+    liste.appendChild(li);
+  });
+}
+
+function baueHilfe() {
+  $('hilfeSteuerung').textContent = tippGeraet
+    ? 'Linke Zone: Finger links dreht nach links, rechts nach rechts. Rechte Zone: links Schub, rechts Feuer. In der Mitte ist der Hyperraum.'
+    : 'Pfeil links und rechts drehen, Pfeil hoch gibt Schub, Leertaste schießt, Pfeil runter springt in den Hyperraum. P ist Pause, M schaltet den Ton.';
+}
+
+// --------------------------- Freunde herausfordern ---------------------------
+
+let offenesDuell = null;
+let vorTeilen = 'fStart';
+
+function reinerName(text) {
+  // Nur sichtbare Zeichen und nicht zu lang: Der Name kommt aus einem fremden Link
+  const sauber = String(text == null ? '' : text).normalize('NFC').replace(/[\p{C}<>]/gu, '').trim();
+  return Array.from(sauber).slice(0, 12).join('');
+}
+
+function linkBauen() {
+  const teile = new URLSearchParams({ name: reinerName($('nameFeld').value) || 'Ein Freund', punkte: daten.rekorde[daten.stufe], stufe: daten.stufe });
+  return SPIEL_ADRESSE + '#' + teile.toString();
+}
+
+function oeffneTeilen(zurueck) {
+  vorTeilen = zurueck;
+  $('nameFeld').value = daten.name;
+  $('teilenStatus').textContent = '';
+  $('linkFeld').hidden = true;
+  $('teilenText').textContent = 'Du teilst deinen Rekord: ' + zahl(daten.rekorde[daten.stufe]) + ' Punkte auf Stufe ' + STUFEN[daten.stufe].name + '. Wer den Link öffnet, kann dich herausfordern.';
+  zeigeFenster('fTeilen');
+}
+
+async function teile() {
+  daten.name = reinerName($('nameFeld').value);
+  speichere();
+  const adresse = linkBauen();
+  const text = 'Ich habe ' + zahl(daten.rekorde[daten.stufe]) + ' Punkte in Brocken-Jäger (Stufe ' + STUFEN[daten.stufe].name + '). Schaffst du mehr?';
+  const status = $('teilenStatus');
+  status.textContent = '';
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'Brocken-Jäger', text, url: adresse });
+      return;
+    }
+    await navigator.clipboard.writeText(text + ' ' + adresse);
+    status.textContent = 'Link kopiert! Füge ihn jetzt im Chat ein.';
+  } catch (error) {
+    if (error.name === 'AbortError') return;
+    const feld = $('linkFeld');
+    feld.value = adresse;
+    feld.hidden = false;
+    feld.select();
+    status.textContent = 'Kopiere diesen Link:';
+  }
+}
+
+function leseHerausforderung() {
+  if (location.hash.length < 2) return;
+  const teile = new URLSearchParams(location.hash.slice(1));
+  const name = reinerName(teile.get('name'));
+  const punkte = Number(teile.get('punkte'));
+  const stufe = teile.get('stufe');
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (error) {}
+  if (!name || !Number.isInteger(punkte) || punkte < 1 || punkte > 99999999) return;
+  if (!Object.prototype.hasOwnProperty.call(STUFEN, stufe)) return;
+  const bekannt = daten.freunde.find(f => f.name === name && f.stufe === stufe);
+  if (bekannt) bekannt.punkte = Math.max(bekannt.punkte, punkte);
+  else daten.freunde.push({ name, punkte, stufe });
+  daten.freunde.sort((a, b) => b.punkte - a.punkte);
+  daten.freunde = daten.freunde.slice(0, 30);
+  daten.stufe = stufe;
+  speichere();
+  offenesDuell = { name, punkte, stufe };
+}
+
+// --------------------------- Knöpfe ---------------------------
+
+function schalteTon() {
+  daten.ton = !daten.ton;
+  speichere();
+  zeigeTon();
+  ton.an();
+  ton.klick();
+}
+function zeigeTon() {
+  $('tonKnopf').classList.toggle('stumm', !daten.ton);
+  $('tonKnopf').setAttribute('aria-label', daten.ton ? 'Ton ausschalten' : 'Ton einschalten');
+}
+
+for (const k of document.querySelectorAll('[data-oeffne]')) {
+  k.addEventListener('click', () => {
+    if (k.dataset.oeffne === 'fStart' && !$('fEnde').hidden) { zumMenue(); return; }
+    zeigeFenster(k.dataset.oeffne);
+  });
+}
+$('losKnopf').addEventListener('click', starte);
+$('tonKnopf').addEventListener('click', schalteTon);
+$('pauseKnopf').addEventListener('click', () => { ton.an(); pausiere(); });
+$('weiterKnopf').addEventListener('click', weiter);
+$('pauseNeu').addEventListener('click', () => { merkeRekord(); starte(); });
+$('pauseMenue').addEventListener('click', zumMenue);
+$('nochmalKnopf').addEventListener('click', starte);
+$('endeTeilen').addEventListener('click', () => oeffneTeilen('fEnde'));
+$('listeTeilen').addEventListener('click', () => oeffneTeilen('fListe'));
+$('teilenKnopf').addEventListener('click', teile);
+$('teilenZurueck').addEventListener('click', () => zeigeFenster(vorTeilen));
+
+// --------------------------- Tastatur ---------------------------
+
+const gedrueckt = new Set();
+const TASTEN = {
+  ArrowLeft: 'links', a: 'links', A: 'links',
+  ArrowRight: 'rechts', d: 'rechts', D: 'rechts',
+  ArrowUp: 'schub', w: 'schub', W: 'schub',
+  ' ': 'feuer', Spacebar: 'feuer'
+};
+const HYPER_TASTEN = ['ArrowDown', 's', 'S', 'Shift'];
+
+function eingabeNeu() {
+  for (const teil of ['links', 'rechts', 'schub', 'feuer']) {
+    let an = false;
+    for (const key of gedrueckt) if (TASTEN[key] === teil) an = true;
+    for (const f of finger.values()) if (f.teil === teil) an = true;
+    eingabe[teil] = an;
+  }
+  for (const el of document.querySelectorAll('.zone .teil')) el.classList.toggle('an', eingabe[el.dataset.teil]);
+}
+
+function loslassen() {
+  gedrueckt.clear();
+  finger.clear();
+  eingabeNeu();
+}
+
+window.addEventListener('keydown', e => {
+  if (e.target && e.target.tagName === 'INPUT') return;
+  const spielLaeuft = $('fenster').hidden && s.phase === 'lauf';
+  if (e.key in TASTEN || HYPER_TASTEN.includes(e.key)) {
+    if (!$('fenster').hidden) return;
+    e.preventDefault();
+    if (!spielLaeuft) return;
+    ton.an();
+    if (HYPER_TASTEN.includes(e.key)) { if (!e.repeat) s.hyperWunsch = true; return; }
+    if (TASTEN[e.key] === 'feuer' && !e.repeat) s.schussWunsch = true;
+    gedrueckt.add(e.key);
+    eingabeNeu();
+    return;
+  }
+  if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+    if ($('fenster').hidden) pausiere();
+    else if (!$('fPause').hidden) weiter();
+  } else if (e.key === 'm' || e.key === 'M') {
+    schalteTon();
+  }
+});
+window.addEventListener('keyup', e => {
+  // Bei gedrückter Umschalttaste meldet der Browser "A" statt "a": beides loslassen
+  gedrueckt.delete(e.key);
+  if (e.key.length === 1) { gedrueckt.delete(e.key.toLowerCase()); gedrueckt.delete(e.key.toUpperCase()); }
+  eingabeNeu();
+});
+
+// --------------------------- Touch-Zonen ---------------------------
+
+// Jeder Finger zählt einzeln. Man kann in der Zone hin und her rutschen, ohne loszulassen.
+const finger = new Map();
+function teilUnter(zone, x) {
+  const r = zone.getBoundingClientRect();
+  const linkeHaelfte = x < r.left + r.width / 2;
+  if (zone.id === 'zoneLinks') return linkeHaelfte ? 'links' : 'rechts';
+  return linkeHaelfte ? 'schub' : 'feuer';
+}
+for (const zone of document.querySelectorAll('.zone')) {
+  zone.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    ton.an();
+    try { zone.setPointerCapture(e.pointerId); } catch (error) {}
+    const teil = teilUnter(zone, e.clientX);
+    finger.set(e.pointerId, { zone, teil });
+    if (teil === 'feuer' && s.phase === 'lauf') s.schussWunsch = true;
+    eingabeNeu();
+  });
+  zone.addEventListener('pointermove', e => {
+    const f = finger.get(e.pointerId);
+    if (!f) return;
+    const teil = teilUnter(f.zone, e.clientX);
+    if (teil === f.teil) return;
+    if (teil === 'feuer' && s.phase === 'lauf') s.schussWunsch = true;
+    f.teil = teil;
+    eingabeNeu();
+  });
+  const weg = e => { if (finger.delete(e.pointerId)) eingabeNeu(); };
+  zone.addEventListener('pointerup', weg);
+  zone.addEventListener('pointercancel', weg);
+  zone.addEventListener('lostpointercapture', weg);
+}
+$('hyperKnopf').addEventListener('pointerdown', e => {
+  e.preventDefault();
+  ton.an();
+  if (s.phase === 'lauf') s.hyperWunsch = true;
+  $('hyperKnopf').classList.add('an');
+});
+for (const art of ['pointerup', 'pointercancel', 'pointerleave']) $('hyperKnopf').addEventListener(art, () => $('hyperKnopf').classList.remove('an'));
+// Kein Kontextmenü bei langem Drücken
+document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('#tasten, #bild')) e.preventDefault(); });
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && s.phase === 'lauf') pausiere();
+});
+window.addEventListener('blur', () => {
+  if (s.phase === 'lauf') pausiere();
+  loslassen();
+});
+window.addEventListener('resize', passeGroesseAn);
+window.addEventListener('orientationchange', passeGroesseAn);
+
+// --------------------------- Hauptschleife ---------------------------
+
+let letzteZeit = 0;
+function bild(jetzt) {
+  const dt = Math.min(1 / 30, (jetzt - letzteZeit) / 1000 || 0);
+  letzteZeit = jetzt;
+  const offen = !$('fenster').hidden;
+  // Im Menü und nach dem Spiel treiben die Brocken einfach weiter
+  if (!offen || s.phase === 'aus' || s.phase === 'menue') {
+    // Kleine Schritte, damit schnelle Schüsse nicht durch kleine Brocken fliegen
+    const teile = Math.ceil(dt / (1 / 120));
+    for (let i = 0; i < teile; i++) rechne(dt / teile);
+  }
+  const spielt = !offen && s.phase === 'lauf';
+  ton.dauer(spielt && s.schiff && s.schiff.schub, spielt && s.ufo ? s.ufo.art : '');
+  zeichneHud();
+  zeichne();
+  requestAnimationFrame(bild);
+}
+
+leseHerausforderung();
+passeGroesseAn();
+// Im Hintergrund des Menüs schweben schon ein paar Brocken
+neuesSpiel();
+s.phase = 'menue';
+s.schiff = null;
+s.bannerUhr = 0;
+startBrocken = neuerBrocken(0, 0, 2);
+zeigeTon();
+zeigeFenster('fStart');
+requestAnimationFrame(bild);
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
