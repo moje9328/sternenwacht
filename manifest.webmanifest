@@ -1,7 +1,7 @@
 {
   "name": "Brocken-Jäger",
   "short_name": "Brocken-Jäger",
-  "description": "Das klassische Weltraumspiel in Neon: Schieß die Felsbrocken klein, bevor sie dich treffen.",
+  "description": "Felsbrocken fallen von oben: Weich aus und schieß sie klein.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",

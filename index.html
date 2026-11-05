@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Brocken-Jäger – Pixelhafen</title>
-<meta name="description" content="Das klassische Weltraumspiel in Neon: Schieß die Felsbrocken klein, bevor sie dich treffen. Kostenlos, ohne Anmeldung, ohne Werbung.">
+<meta name="description" content="Felsbrocken fallen von oben: Weich aus und schieß sie klein. Kostenlos, ohne Anmeldung, ohne Werbung.">
 <!-- App-Einstellungen, damit sich das Spiel auf dem Handy wie eine App verhält -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#000000">
@@ -119,19 +119,6 @@
   .zone .teil.an { color: #ffffff; background: rgba(34, 230, 255, 0.22); }
   .zone .teil.feuer { color: rgba(255, 247, 168, 0.95); }
   .zone .teil.feuer.an { background: rgba(255, 240, 120, 0.2); }
-  #hyperKnopf {
-    flex: none;
-    width: 58px;
-    padding: 0;
-    color: var(--muted);
-    background: transparent;
-    border: 1.5px dashed rgba(169, 188, 203, 0.45);
-    border-radius: 18px;
-    font: 7px/1.6 var(--retro);
-    touch-action: none;
-  }
-  #hyperKnopf svg { display: block; width: 26px; height: 26px; margin: 0 auto 6px; }
-  #hyperKnopf.an { color: #fff; background: rgba(255, 255, 255, 0.12); }
 
   /* Fenster für Start, Pause und Ende */
   #fenster {
@@ -303,12 +290,10 @@
   <div id="buehne"><canvas id="bild" role="img" aria-label="Spielfeld von Brocken-Jäger"></canvas></div>
   <div id="tasten" aria-hidden="true">
     <div class="zone" id="zoneLinks">
-      <span class="teil" data-teil="links"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15a7.5 7.5 0 1 0 2.2-8.6"/><path d="M6.5 2.5v4.5H11"/></svg><small>DREHEN</small></span></span>
-      <span class="teil" data-teil="rechts"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 15a7.5 7.5 0 1 1-2.2-8.6"/><path d="M17.5 2.5v4.5H13"/></svg><small>DREHEN</small></span></span>
+      <span class="teil" data-teil="links"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><small>LINKS</small></span></span>
+      <span class="teil" data-teil="rechts"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><small>RECHTS</small></span></span>
     </div>
-    <button id="hyperKnopf" type="button" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5L19 19M19 5l-2.5 2.5M7.5 16.5L5 19"/></svg>HYPER</button>
     <div class="zone" id="zoneRechts">
-      <span class="teil" data-teil="schub"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l6 14-6-3.5L6 17z"/><path d="M10 19.5l2 2 2-2"/></svg><small>SCHUB</small></span></span>
       <span class="teil feuer" data-teil="feuer"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg><small>FEUER</small></span></span>
     </div>
   </div>
@@ -323,7 +308,7 @@
         <h1>BROCKEN&shy;JÄGER</h1>
         <canvas id="startBild" width="336" height="256" aria-hidden="true"></canvas>
       </div>
-      <p class="unterzeile">Felsbrocken von allen Seiten. Schieß sie klein, bevor sie dich treffen.</p>
+      <p class="unterzeile">Felsbrocken fallen von oben. Weich aus und schieß sie klein.</p>
       <div id="duell" hidden><strong id="duellTitel"></strong><span id="duellText"></span></div>
       <div class="stufen" role="group" aria-label="Schwierigkeit"></div>
       <p class="klein js-stufentext"></p>
@@ -353,19 +338,16 @@
       <h2>SO GEHT'S</h2>
       <ul class="regeln">
         <li><strong id="hilfeSteuerung"></strong></li>
-        <li>Türkis bist du. Alles andere, was leuchtet, ist gefährlich.</li>
+        <li>Dein türkises Dreieck fährt unten auf der Leiste. Von oben fallen Felsbrocken.</li>
+        <li>Weich aus oder schieß sie kaputt. Trifft dich ein Brocken, verlierst du ein Leben.</li>
         <li>Große Brocken zerfallen in zwei mittlere, mittlere in zwei kleine. Kleine verschwinden ganz.</li>
-        <li>Wer über den Rand fliegt, kommt auf der anderen Seite wieder herein. Das gilt für dich und für die Brocken.</li>
-        <li>Ab und zu kommt ein grünes Ufo und schießt auf dich. Das kleine zielt genau.</li>
-        <li>Hyperraum bringt dich an eine zufällige Stelle. Das rettet dich, aber du kannst auch direkt neben einem Brocken landen.</li>
+        <li>Mit jeder Welle fallen mehr Brocken, und sie werden schneller.</li>
         <li>Alle 10.000 Punkte bekommst du ein Leben dazu.</li>
       </ul>
       <div class="punkteTabelle">
         <span>Großer Brocken</span><b>20</b>
         <span>Mittlerer Brocken</span><b>50</b>
         <span>Kleiner Brocken</span><b>100</b>
-        <span>Großes Ufo</span><b>200</b>
-        <span>Kleines Ufo</span><b>1000</b>
       </div>
       <div class="knoepfe"><button class="btn" type="button" data-oeffne="fStart">Zurück</button></div>
     </section>
@@ -434,44 +416,27 @@ const TAU = Math.PI * 2;
 const KURZE_SEITE = 480;
 let W = 480, H = 800;
 
-const SCHIFF_R = 11;           // Wie groß das Schiff für Treffer ist
-const DREHEN = 4.4;            // Drehung pro Sekunde (im Bogenmaß)
-const SCHUB = 430;             // Beschleunigung mit Schub
-const REIBUNG = 0.5;           // Das Schiff treibt langsam aus, wie im Original
-const HOECHST = 520;           // Höchstgeschwindigkeit
-const KUGEL_TEMPO = 620;
-const KUGEL_ZEIT = 0.95;       // So lange fliegt ein Schuss
+const SCHIFF_R = 12;           // Wie groß das Schiff für Treffer ist
+const SCHIFF_TEMPO = 340;      // So schnell fährt das Schiff nach links und rechts
+const ABSTAND_UNTEN = 34;      // So weit über dem unteren Rand fährt das Schiff
+const KUGEL_TEMPO = 720;
 const DAUERFEUER = 0.2;        // Abstand der Schüsse beim Gedrückthalten
 const NEUES_LEBEN = 10000;
 
-// Groß, mittel, klein: Radius, Tempo, Punkte, Farbe
+// Groß, mittel, klein: Radius, Fallgeschwindigkeit, Punkte, Farbe
 const BROCKEN = {
-  3: { r: 44, v: [32, 64], punkte: 20, farbe: '#b45cff' },
-  2: { r: 23, v: [56, 110], punkte: 50, farbe: '#ff2bd6' },
-  1: { r: 12, v: [85, 160], punkte: 100, farbe: '#ff8a3d' }
+  3: { r: 40, v: [55, 80], punkte: 20, farbe: '#b45cff' },
+  2: { r: 22, v: [70, 100], punkte: 50, farbe: '#ff2bd6' },
+  1: { r: 12, v: [85, 120], punkte: 100, farbe: '#ff8a3d' }
 };
-const UFOS = {
-  gross: { r: 19, k: 1, tempo: 95, punkte: 200, schuss: 1.25 },
-  klein: { r: 11, k: 0.58, tempo: 135, punkte: 1000, schuss: 0.95 }
-};
-const F = { schiff: '#22e6ff', kugel: '#c9fbff', ufo: '#39ff14', ufoKugel: '#ff2244', flamme: '#ffd23d', weiss: '#ffffff' };
+const F = { schiff: '#22e6ff', kugel: '#c9fbff', weiss: '#ffffff' };
 
 const STUFEN = {
-  leicht: { name: 'Leicht', leben: 5, tempo: 0.75, schutz: 3.5, fehler: 0.5, kugeln: 6, ufoAb: 2, mehr: 0, sicher: true, text: '5 Leben, langsamere Brocken, länger Schutz und der Hyperraum landet immer sicher.' },
-  normal: { name: 'Normal', leben: 3, tempo: 1, schutz: 2.5, fehler: 0.22, kugeln: 4, ufoAb: 1, mehr: 0, sicher: false, text: 'Wie das klassische Spiel: 3 Leben und höchstens 4 Schüsse gleichzeitig.' },
-  schwer: { name: 'Schwer', leben: 3, tempo: 1.3, schutz: 1.6, fehler: 0.07, kugeln: 4, ufoAb: 1, mehr: 2, sicher: false, text: 'Mehr und schnellere Brocken, und die Ufos zielen fast genau.' }
+  leicht: { name: 'Leicht', leben: 5, tempo: 0.72, schutz: 3, kugeln: 6, mehr: 0, text: '5 Leben, die Brocken fallen langsamer und du kannst mehr auf einmal schießen.' },
+  normal: { name: 'Normal', leben: 3, tempo: 1, schutz: 2, kugeln: 4, mehr: 0, text: '3 Leben und höchstens 4 Schüsse gleichzeitig.' },
+  schwer: { name: 'Schwer', leben: 3, tempo: 1.3, schutz: 1.5, kugeln: 4, mehr: 3, text: 'Mehr Brocken, und sie fallen schneller.' }
 };
 const STUFEN_NAMEN = Object.keys(STUFEN);
-
-// Kürzester Weg über den Rand hinweg
-const ueberRand = (d, groesse) => d - groesse * Math.round(d / groesse);
-function abstand(a, b) {
-  return Math.hypot(ueberRand(b.x - a.x, W), ueberRand(b.y - a.y, H));
-}
-function umlaufen(o) {
-  if (o.x < 0) o.x += W; else if (o.x >= W) o.x -= W;
-  if (o.y < 0) o.y += H; else if (o.y >= H) o.y -= H;
-}
 
 // --------------------------- Speichern ---------------------------
 
@@ -494,61 +459,21 @@ function speichere() {
 // --------------------------- Ton ---------------------------
 
 const ton = {
-  ctx: null, rauschen: null, schubLaut: null, ufoLaut: null, ufoTon: null, ufoWackler: null,
+  ctx: null, rauschen: null,
   an() {
     if (!this.ctx) {
       const AudioClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioClass) return;
       this.ctx = new AudioClass();
-      // Rauschen für Explosionen und das Triebwerk
+      // Rauschen für die Explosionen
       const laenge = this.ctx.sampleRate;
       this.rauschen = this.ctx.createBuffer(1, laenge, this.ctx.sampleRate);
       const kanal = this.rauschen.getChannelData(0);
       for (let i = 0; i < laenge; i++) kanal[i] = Math.random() * 2 - 1;
-      this.baueDauertoene();
     }
     if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
   },
   bereit() { return daten.ton && this.ctx && this.ctx.state === 'running'; },
-  baueDauertoene() {
-    const c = this.ctx;
-    // Triebwerk: tiefes, gefiltertes Rauschen
-    const quelle = c.createBufferSource();
-    quelle.buffer = this.rauschen;
-    quelle.loop = true;
-    const filter = c.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 420;
-    this.schubLaut = c.createGain();
-    this.schubLaut.gain.value = 0;
-    quelle.connect(filter).connect(this.schubLaut).connect(c.destination);
-    quelle.start();
-    // Ufo: ein auf und ab heulender Ton
-    this.ufoTon = c.createOscillator();
-    this.ufoTon.type = 'square';
-    this.ufoTon.frequency.value = 440;
-    this.ufoWackler = c.createOscillator();
-    this.ufoWackler.frequency.value = 5;
-    const tiefe = c.createGain();
-    tiefe.gain.value = 60;
-    this.ufoWackler.connect(tiefe).connect(this.ufoTon.frequency);
-    this.ufoLaut = c.createGain();
-    this.ufoLaut.gain.value = 0;
-    this.ufoTon.connect(this.ufoLaut).connect(c.destination);
-    this.ufoTon.start();
-    this.ufoWackler.start();
-  },
-  dauer(schub, ufo) {
-    if (!this.ctx) return;
-    const t = this.ctx.currentTime;
-    const an = this.bereit();
-    this.schubLaut.gain.setTargetAtTime(an && schub ? 0.11 : 0, t, 0.03);
-    this.ufoLaut.gain.setTargetAtTime(an && ufo ? 0.016 : 0, t, 0.05);
-    if (ufo) {
-      this.ufoTon.frequency.setTargetAtTime(ufo === 'klein' ? 880 : 420, t, 0.05);
-      this.ufoWackler.frequency.setTargetAtTime(ufo === 'klein' ? 9 : 4.5, t, 0.05);
-    }
-  },
   piep(frequenz, dauer, lautstaerke = 0.05, art = 'square', start = 0, ziel = 0) {
     if (!this.bereit()) return;
     const jetzt = this.ctx.currentTime + start;
@@ -580,11 +505,8 @@ const ton = {
     quelle.stop(jetzt + dauer + 0.05);
   },
   schuss() { this.piep(1500, 0.09, 0.035, 'square', 0, 320); },
-  ufoSchuss() { this.piep(900, 0.12, 0.025, 'sawtooth', 0, 500); },
   brocken(g) { this.knall(0.18 + g * 0.12, 0.16 + g * 0.06, 2600 - g * 600); },
-  schiffWeg() { this.knall(1.1, 0.35, 1800); this.piep(160, 0.7, 0.07, 'sawtooth', 0, 40); },
-  herz(hoch) { this.piep(hoch ? 62 : 54, 0.13, 0.22, 'triangle'); },
-  hyper() { this.piep(220, 0.32, 0.05, 'sine', 0, 1800); },
+  treffer() { this.knall(0.9, 0.32, 1800); this.piep(160, 0.6, 0.07, 'sawtooth', 0, 40); },
   leben() { [784, 988, 1175, 1568].forEach((f, i) => this.piep(f, 0.12, 0.05, 'square', i * 0.07)); },
   welle() { [392, 523, 659].forEach((f, i) => this.piep(f, 0.14, 0.04, 'triangle', i * 0.09)); },
   ueberholt() { [659, 880, 1175].forEach((f, i) => this.piep(f, 0.12, 0.06, 'triangle', i * 0.08)); },
@@ -594,29 +516,26 @@ const ton = {
 // --------------------------- Spielzustand ---------------------------
 
 let s = null;
-const eingabe = { links: false, rechts: false, schub: false, feuer: false };
-
-function neuesSchiff() {
-  return { x: W / 2, y: H / 2, vx: 0, vy: 0, a: -Math.PI / 2, schutz: STUFEN[daten.stufe].schutz, weg: 0, flackern: 0 };
-}
+const eingabe = { links: false, rechts: false, feuer: false };
 
 function neuesSpiel() {
   const st = STUFEN[daten.stufe];
   s = {
     phase: 'lauf', punkte: 0, leben: st.leben, welle: 0, abgeschossen: 0, naechstesLeben: NEUES_LEBEN,
-    schiff: null, brocken: [], kugeln: [], ufo: null, teilchen: [], truemmer: [], schrift: [],
-    welleZeit: 0, wellePause: -1, ufoUhr: 0, herzUhr: 1, herzHoch: false, wiederUhr: 0, hyperUhr: 0,
-    autoUhr: 0, schussWunsch: false, hyperWunsch: false,
-    banner: '', bannerUhr: 0, wackeln: 0, endeUhr: 0, endeGezeigt: false, neuerRekord: false, ueberholt: false, ursache: ''
+    schiff: { x: W / 2, vx: 0, schutz: st.schutz, sichtbar: true },
+    brocken: [], kugeln: [], teilchen: [], truemmer: [], schrift: [],
+    nochZuFallen: 0, fallUhr: 0, wellePause: -1,
+    autoUhr: 0, schussWunsch: false,
+    banner: '', bannerUhr: 0, wackeln: 0, endeUhr: 0, endeGezeigt: false, neuerRekord: false, ueberholt: false
   };
-  s.schiff = neuesSchiff();
   naechsteWelle();
 }
 
-function neuerBrocken(x, y, g, vx = 0, vy = 0) {
+const schiffY = () => H - ABSTAND_UNTEN;
+const wellenTempo = () => STUFEN[daten.stufe].tempo * (1 + Math.min(0.8, (s.welle - 1) * 0.07));
+
+function neuerBrocken(x, y, g, vx, vy) {
   const art = BROCKEN[g];
-  const tempo = zufall(art.v[0], art.v[1]) * STUFEN[daten.stufe].tempo * (1 + Math.min(0.5, (s.welle - 1) * 0.05));
-  const w = Math.random() * TAU;
   // Unregelmäßige Kanten, damit jeder Brocken anders aussieht
   const ecken = 9 + Math.floor(Math.random() * 4);
   const form = new Path2D();
@@ -627,65 +546,44 @@ function neuerBrocken(x, y, g, vx = 0, vy = 0) {
     else form.moveTo(Math.cos(winkel) * r, Math.sin(winkel) * r);
   }
   form.closePath();
-  return { x, y, g, r: art.r, vx: vx + Math.cos(w) * tempo, vy: vy + Math.sin(w) * tempo, a: Math.random() * TAU, va: zufall(-1.2, 1.2) * (4 - g) * 0.5, form };
+  return {
+    x, y, g, r: art.r,
+    vx: vx === undefined ? zufall(-30, 30) : vx,
+    vy: vy === undefined ? zufall(art.v[0], art.v[1]) * wellenTempo() : vy,
+    a: Math.random() * TAU, va: zufall(-1.2, 1.2) * (4 - g) * 0.5, form
+  };
 }
 
-// Ufos kommen mit jeder Welle etwas öfter, aber nicht ohne Ende
-const ufoTakt = () => 1 + 0.08 * Math.min(8, s.welle - 1);
-
+// Jede Welle lässt eine bestimmte Zahl großer Brocken nacheinander fallen
 function naechsteWelle() {
-  const st = STUFEN[daten.stufe];
   s.welle++;
-  s.welleZeit = 0;
   s.wellePause = -1;
-  s.herzUhr = 1;
-  const anzahl = Math.min(11 + st.mehr, 2 + 2 * s.welle + st.mehr);
-  const mitte = s.schiff || { x: W / 2, y: H / 2 };
-  for (let i = 0; i < anzahl; i++) {
-    // Brocken kommen vom Rand, nie direkt auf dem Schiff
-    let p = null;
-    for (let versuch = 0; versuch < 60; versuch++) {
-      const amRand = Math.random() < 0.5;
-      const q = amRand ? { x: Math.random() * W, y: Math.random() < 0.5 ? zufall(0, 40) : H - zufall(0, 40) }
-                       : { x: Math.random() < 0.5 ? zufall(0, 40) : W - zufall(0, 40), y: Math.random() * H };
-      if (abstand(q, mitte) > Math.min(W, H) * 0.38) { p = q; break; }
-    }
-    if (!p) p = { x: 0, y: 0 };
-    s.brocken.push(neuerBrocken(p.x, p.y, 3));
-  }
-  s.ufoUhr = zufall(13, 21) / ufoTakt();
+  s.nochZuFallen = Math.min(16, 4 + 2 * s.welle) + STUFEN[daten.stufe].mehr;
+  s.fallUhr = 1.2;
   s.banner = 'WELLE ' + s.welle;
   s.bannerUhr = 2;
   if (s.welle > 1) ton.welle();
+}
+
+function lassFallen() {
+  // Nicht genau über einem anderen gerade gefallenen Brocken
+  let x = zufall(50, W - 50);
+  for (let i = 0; i < 10; i++) {
+    if (s.brocken.every(b => b.y > 120 || Math.abs(b.x - x) > 90)) break;
+    x = zufall(50, W - 50);
+  }
+  s.brocken.push(neuerBrocken(x, -50, 3));
+  s.nochZuFallen--;
 }
 
 // --------------------------- Aktionen ---------------------------
 
 function schiesse() {
   const sch = s.schiff;
-  const eigene = s.kugeln.filter(k => !k.feind).length;
-  if (!sch || sch.weg > 0 || eigene >= STUFEN[daten.stufe].kugeln) return false;
-  const cx = Math.cos(sch.a), cy = Math.sin(sch.a);
-  s.kugeln.push({ x: sch.x + cx * 15, y: sch.y + cy * 15, vx: sch.vx + cx * KUGEL_TEMPO, vy: sch.vy + cy * KUGEL_TEMPO, t: KUGEL_ZEIT, feind: false });
+  if (!sch.sichtbar || s.kugeln.length >= STUFEN[daten.stufe].kugeln) return false;
+  s.kugeln.push({ x: sch.x, y: schiffY() - 16 });
   ton.schuss();
   return true;
-}
-
-function hyperraum() {
-  const sch = s.schiff;
-  if (!sch || sch.weg > 0 || s.hyperUhr > 0) return;
-  funken(sch.x, sch.y, [F.schiff, F.weiss], 14, 140);
-  let ziel = { x: zufall(30, W - 30), y: zufall(30, H - 30) };
-  if (STUFEN[daten.stufe].sicher) {
-    for (let i = 0; i < 40; i++) {
-      const q = { x: zufall(30, W - 30), y: zufall(30, H - 30) };
-      if (s.brocken.every(b => abstand(b, q) > b.r + 90)) { ziel = q; break; }
-    }
-  }
-  sch.x = ziel.x; sch.y = ziel.y; sch.vx = 0; sch.vy = 0;
-  sch.weg = 0.45;
-  s.hyperUhr = 1;
-  ton.hyper();
 }
 
 function punkteDazu(n, x, y, farbe) {
@@ -701,7 +599,7 @@ function punkteDazu(n, x, y, farbe) {
   if (offenesDuell && !s.ueberholt && daten.stufe === offenesDuell.stufe && vorher <= offenesDuell.punkte && s.punkte > offenesDuell.punkte) {
     s.ueberholt = true;
     ton.ueberholt();
-    s.schrift.push({ text: offenesDuell.name + ' ÜBERHOLT!', x: W / 2, y: H * 0.36, t: 2, farbe: F.ufo, gross: true });
+    s.schrift.push({ text: offenesDuell.name + ' ÜBERHOLT!', x: W / 2, y: H * 0.36, t: 2, farbe: '#39ff14', gross: true });
   }
 }
 
@@ -712,7 +610,7 @@ function funken(x, y, farben, anzahl, tempo = 120) {
   }
 }
 
-// Ein Brocken wird getroffen: Er zerfällt in zwei kleinere
+// Ein Brocken wird getroffen: Er zerfällt in zwei kleinere, die zur Seite wegfliegen
 function zerlege(i, mitPunkten) {
   const b = s.brocken[i];
   s.brocken.splice(i, 1);
@@ -724,53 +622,37 @@ function zerlege(i, mitPunkten) {
     punkteDazu(art.punkte, b.x, b.y, art.farbe);
   }
   if (b.g > 1) {
-    for (let k = 0; k < 2; k++) s.brocken.push(neuerBrocken(b.x, b.y, b.g - 1, b.vx * 0.5, b.vy * 0.5));
+    const fall = Math.max(b.vy, BROCKEN[b.g - 1].v[0] * wellenTempo());
+    for (const seite of [-1, 1]) {
+      s.brocken.push(neuerBrocken(b.x + seite * b.r * 0.4, b.y, b.g - 1, seite * zufall(70, 110), fall * 0.9));
+    }
   }
 }
 
-function ufoWeg(mitPunkten) {
-  const u = s.ufo;
-  funken(u.x, u.y, [F.ufo, F.weiss, F.ufoKugel], 22, 170);
-  ton.brocken(3);
-  if (mitPunkten) punkteDazu(UFOS[u.art].punkte, u.x, u.y, F.ufo);
-  s.ufo = null;
-  s.ufoUhr = zufall(10, 18) / ufoTakt();
-}
-
-// Die Linien des Schiffs fliegen auseinander
-const SCHIFF_LINIEN = [[15, 0, -11, -10], [-11, -10, -6, 0], [-6, 0, -11, 10], [-11, 10, 15, 0]];
-function schiffWeg(ursache) {
-  const sch = s.schiff;
-  const c = Math.cos(sch.a), si = Math.sin(sch.a);
-  for (const [x1, y1, x2, y2] of SCHIFF_LINIEN) {
-    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-    const w = Math.atan2(my, mx), v = zufall(30, 90);
-    s.truemmer.push({
-      x: sch.x + mx * c - my * si, y: sch.y + mx * si + my * c,
-      vx: sch.vx * 0.3 + Math.cos(w + sch.a) * v, vy: sch.vy * 0.3 + Math.sin(w + sch.a) * v,
-      a: sch.a + Math.atan2(y2 - y1, x2 - x1), va: zufall(-3, 3), laenge: Math.hypot(x2 - x1, y2 - y1), t: 1.6
-    });
+// Getroffen: Ein Leben weg, kurz blinken, dann geht es an derselben Stelle weiter
+function getroffen() {
+  const sch = s.schiff, y = schiffY();
+  for (let i = 0; i < 4; i++) {
+    const w = -Math.PI / 2 + (i - 1.5) * 0.9;
+    s.truemmer.push({ x: sch.x, y, vx: Math.cos(w) * zufall(40, 90), vy: Math.sin(w) * zufall(40, 90), a: Math.random() * TAU, va: zufall(-4, 4), laenge: 16, t: 1.2 });
   }
-  funken(sch.x, sch.y, [F.schiff, F.weiss, F.flamme], 26, 160);
-  ton.schiffWeg();
+  funken(sch.x, y, [F.schiff, F.weiss, '#ffd23d'], 26, 160);
+  ton.treffer();
   s.wackeln = 0.35;
-  s.schiff = null;
   s.leben--;
-  s.ursache = ursache;
   if (s.leben <= 0) {
+    sch.sichtbar = false;
     s.phase = 'aus';
     s.endeUhr = 0;
     merkeRekord();
   } else {
-    s.wiederUhr = 2;
+    sch.schutz = STUFEN[daten.stufe].schutz;
   }
 }
 
 // --------------------------- Zeit ---------------------------
 
 function rechne(dt) {
-  const st = STUFEN[daten.stufe];
-
   // Funken, Trümmer, Schrift
   for (let i = s.teilchen.length - 1; i >= 0; i--) {
     const t = s.teilchen[i];
@@ -793,157 +675,89 @@ function rechne(dt) {
   }
   if (s.wackeln > 0) s.wackeln -= dt;
   if (s.bannerUhr > 0) s.bannerUhr -= dt;
-  if (s.hyperUhr > 0) s.hyperUhr -= dt;
 
-  // Schiff
+  // Schiff: fährt nur unten nach links und rechts, beschleunigt und bremst ganz kurz
   const sch = s.schiff;
-  if (sch) {
-    if (sch.weg > 0) {
-      sch.weg -= dt;
-      sch.schub = false;
-    } else {
-      sch.a += ((eingabe.rechts ? 1 : 0) - (eingabe.links ? 1 : 0)) * DREHEN * dt;
-      sch.schub = eingabe.schub;
-      if (sch.schub) {
-        sch.vx += Math.cos(sch.a) * SCHUB * dt;
-        sch.vy += Math.sin(sch.a) * SCHUB * dt;
-      }
-      const reib = Math.exp(-REIBUNG * dt);
-      sch.vx *= reib; sch.vy *= reib;
-      const v = Math.hypot(sch.vx, sch.vy);
-      if (v > HOECHST) { sch.vx *= HOECHST / v; sch.vy *= HOECHST / v; }
-      sch.x += sch.vx * dt; sch.y += sch.vy * dt;
-      umlaufen(sch);
-      if (sch.schutz > 0) sch.schutz -= dt;
-      s.autoUhr -= dt;
-      if (s.schussWunsch || (eingabe.feuer && s.autoUhr <= 0)) {
-        if (schiesse()) s.autoUhr = DAUERFEUER;
-      }
-      if (s.hyperWunsch) hyperraum();
+  if (s.phase === 'lauf') {
+    const ziel = ((eingabe.rechts ? 1 : 0) - (eingabe.links ? 1 : 0)) * SCHIFF_TEMPO;
+    sch.vx += (ziel - sch.vx) * Math.min(1, dt * 16);
+    sch.x = begrenzt(sch.x + sch.vx * dt, 18, W - 18);
+    if (sch.x <= 18 || sch.x >= W - 18) sch.vx = 0;
+    if (sch.schutz > 0) sch.schutz -= dt;
+    s.autoUhr -= dt;
+    if (s.schussWunsch || (eingabe.feuer && s.autoUhr <= 0)) {
+      if (schiesse()) s.autoUhr = DAUERFEUER;
     }
-  } else if (s.phase === 'lauf') {
-    // Neues Schiff, sobald die Mitte frei ist (spätestens nach ein paar Sekunden, dann mit Schutz)
-    s.wiederUhr -= dt;
-    const mitte = { x: W / 2, y: H / 2 };
-    const frei = s.brocken.every(b => abstand(b, mitte) > b.r + 80) && (!s.ufo || abstand(s.ufo, mitte) > 120);
-    if (s.wiederUhr <= 0 && (frei || s.wiederUhr < -3)) {
-      s.schiff = neuesSchiff();
-      s.autoUhr = 0.3;
-    }
+  } else {
+    sch.vx = 0;
   }
   s.schussWunsch = false;
-  s.hyperWunsch = false;
 
-  // Brocken
-  for (const b of s.brocken) {
-    b.x += b.vx * dt; b.y += b.vy * dt; b.a += b.va * dt;
-    umlaufen(b);
+  // Neue Brocken fallen lassen
+  if (s.phase === 'lauf' && s.nochZuFallen > 0) {
+    s.fallUhr -= dt;
+    if (s.fallUhr <= 0) {
+      lassFallen();
+      s.fallUhr = Math.max(0.55, 1.7 - s.welle * 0.08) / STUFEN[daten.stufe].tempo * zufall(0.75, 1.25);
+    }
   }
 
-  // Schüsse
+  // Brocken fallen, prallen an den Seiten ab und verschwinden unten
+  for (let i = s.brocken.length - 1; i >= 0; i--) {
+    const b = s.brocken[i];
+    b.x += b.vx * dt; b.y += b.vy * dt; b.a += b.va * dt;
+    if (b.x < b.r * 0.8) { b.x = b.r * 0.8; b.vx = Math.abs(b.vx); }
+    if (b.x > W - b.r * 0.8) { b.x = W - b.r * 0.8; b.vx = -Math.abs(b.vx); }
+    if (b.y > H + b.r) s.brocken.splice(i, 1);
+  }
+
+  // Schüsse fliegen gerade nach oben
   for (let i = s.kugeln.length - 1; i >= 0; i--) {
     const k = s.kugeln[i];
-    k.t -= dt;
-    if (k.t <= 0) { s.kugeln.splice(i, 1); continue; }
-    k.x += k.vx * dt; k.y += k.vy * dt;
-    umlaufen(k);
-  }
-
-  // Ufo
-  if (!s.ufo && s.phase === 'lauf' && s.welle >= st.ufoAb && s.wellePause < 0) {
-    s.ufoUhr -= dt;
-    if (s.ufoUhr <= 0) {
-      const kleinChance = s.punkte >= 10000 ? 0.75 : s.punkte >= 4000 ? 0.35 : s.welle >= 3 ? 0.15 : 0;
-      const art = Math.random() < kleinChance ? 'klein' : 'gross';
-      const vonLinks = Math.random() < 0.5;
-      const u = UFOS[art];
-      s.ufo = { art, r: u.r, x: vonLinks ? 0 : W - 0.01, y: zufall(H * 0.12, H * 0.88), vx: (vonLinks ? 1 : -1) * u.tempo * Math.min(1.25, st.tempo), vy: 0, strecke: 0, kursUhr: zufall(0.8, 1.6), schussUhr: 1 };
-    }
-  }
-  const u = s.ufo;
-  if (u) {
-    u.x += u.vx * dt; u.y += u.vy * dt;
-    u.strecke += Math.abs(u.vx * dt);
-    umlaufen(u);
-    u.kursUhr -= dt;
-    if (u.kursUhr <= 0) {
-      u.kursUhr = zufall(0.8, 1.8);
-      u.vy = [-1, 0, 1][Math.floor(Math.random() * 3)] * Math.abs(u.vx) * 0.6;
-    }
-    u.schussUhr -= dt;
-    if (u.schussUhr <= 0 && s.phase === 'lauf') {
-      u.schussUhr = UFOS[u.art].schuss;
-      let w = Math.random() * TAU;
-      const ziel = s.schiff && s.schiff.weg <= 0 ? s.schiff : null;
-      if (ziel && (u.art === 'klein' || Math.random() < 0.25)) {
-        w = Math.atan2(ueberRand(ziel.y - u.y, H), ueberRand(ziel.x - u.x, W)) + zufall(-1, 1) * (u.art === 'klein' ? st.fehler : st.fehler * 2.5);
-      }
-      s.kugeln.push({ x: u.x + Math.cos(w) * (u.r + 4), y: u.y + Math.sin(w) * (u.r + 4), vx: Math.cos(w) * 330, vy: Math.sin(w) * 330, t: 1.5, feind: true });
-      ton.ufoSchuss();
-    }
-    // Einmal quer über das Feld, dann ist es weg
-    if (u.strecke > W + 20) { s.ufo = null; s.ufoUhr = zufall(10, 18) / ufoTakt(); }
+    k.y -= KUGEL_TEMPO * dt;
+    if (k.y < -10) s.kugeln.splice(i, 1);
   }
 
   treffer();
 
-  // Welle geschafft
   if (s.phase === 'lauf') {
-    s.welleZeit += dt;
-    if (!s.brocken.length && s.wellePause < 0) s.wellePause = 2.2;
+    // Welle geschafft, wenn alle Brocken gefallen und weg sind
+    if (!s.nochZuFallen && !s.brocken.length && s.wellePause < 0) s.wellePause = 1.8;
     if (s.wellePause >= 0) {
       s.wellePause -= dt;
       if (s.wellePause < 0) naechsteWelle();
     }
-    // Der Herzschlag aus dem Original: wird mit der Zeit immer schneller
-    if (s.schiff && s.brocken.length) {
-      s.herzUhr -= dt;
-      if (s.herzUhr <= 0) {
-        s.herzHoch = !s.herzHoch;
-        ton.herz(s.herzHoch);
-        s.herzUhr = Math.max(0.26, 1.0 - s.welleZeit * 0.012);
-      }
-    }
   } else if (s.phase === 'aus') {
     s.endeUhr += dt;
-    if (s.endeUhr > 2.2 && !s.endeGezeigt) {
+    if (s.endeUhr > 2 && !s.endeGezeigt) {
       s.endeGezeigt = true;
       zeigeEnde();
     }
   }
 }
 
-function beruehrt(a, b, ra, rb) {
-  return abstand(a, b) < ra + rb;
-}
-
 function treffer() {
-  const sch = s.schiff;
-  const verwundbar = sch && sch.weg <= 0 && sch.schutz <= 0;
-
   for (let i = s.kugeln.length - 1; i >= 0; i--) {
     const k = s.kugeln[i];
-    let weg = false;
     for (let j = s.brocken.length - 1; j >= 0; j--) {
       const b = s.brocken[j];
-      if (beruehrt(k, b, 2, b.r * 0.95)) { zerlege(j, !k.feind); weg = true; break; }
-    }
-    if (!weg && !k.feind && s.ufo && beruehrt(k, s.ufo, 2, s.ufo.r)) { ufoWeg(true); weg = true; }
-    if (!weg && k.feind && verwundbar && s.schiff && beruehrt(k, s.schiff, 2, SCHIFF_R - 1)) { schiffWeg('ufo'); weg = true; }
-    if (weg) s.kugeln.splice(i, 1);
-  }
-
-  if (verwundbar && s.schiff) {
-    for (let j = s.brocken.length - 1; j >= 0; j--) {
-      const b = s.brocken[j];
-      if (beruehrt(s.schiff, b, SCHIFF_R, b.r * 0.88)) { zerlege(j, true); schiffWeg('brocken'); break; }
+      if (Math.hypot(k.x - b.x, k.y - b.y) < b.r * 0.95 + 3) {
+        zerlege(j, true);
+        s.kugeln.splice(i, 1);
+        break;
+      }
     }
   }
-  if (s.ufo && verwundbar && s.schiff && beruehrt(s.schiff, s.ufo, SCHIFF_R, s.ufo.r)) { ufoWeg(true); schiffWeg('ufo'); }
-  if (s.ufo) {
+  const sch = s.schiff;
+  if (s.phase === 'lauf' && sch.schutz <= 0) {
+    const y = schiffY();
     for (let j = s.brocken.length - 1; j >= 0; j--) {
       const b = s.brocken[j];
-      if (beruehrt(s.ufo, b, s.ufo.r, b.r * 0.9)) { zerlege(j, false); ufoWeg(false); break; }
+      if (Math.hypot(sch.x - b.x, y - b.y) < SCHIFF_R + b.r * 0.85) {
+        zerlege(j, false);
+        getroffen();
+        break;
+      }
     }
   }
 }
@@ -965,14 +779,10 @@ function merkeRekord() {
   speichere();
 }
 
-const SPRUECHE = {
-  brocken: ['Der Brocken war härter als dein Schiff.', 'Im All gibt es keine Bremsen.', 'Ein Brocken zu viel.', 'Die Brocken waren diesmal schneller.'],
-  ufo: ['Das Ufo hat dich erwischt.', 'Grüne Männchen, roter Schuss.', 'Das Ufo hat besser gezielt.']
-};
+const SPRUECHE = ['Der Brocken war härter als dein Schiff.', 'Ein Brocken zu viel.', 'Die Brocken waren diesmal schneller.', 'Von oben kam einfach zu viel.'];
 
 function zeigeEnde() {
-  const sprueche = SPRUECHE[s.ursache] || SPRUECHE.brocken;
-  $('eSpruch').textContent = sprueche[Math.floor(Math.random() * sprueche.length)];
+  $('eSpruch').textContent = SPRUECHE[Math.floor(Math.random() * SPRUECHE.length)];
   $('neuerRekord').hidden = !s.neuerRekord;
   $('ePunkte').textContent = zahl(s.punkte);
   $('eWelle').textContent = s.welle;
@@ -998,12 +808,18 @@ function weiter() {
   schliesseFenster();
 }
 
-function zumMenue() {
-  if (s.phase === 'lauf') merkeRekord();
+function menueHintergrund() {
   neuesSpiel();
   s.phase = 'menue';
-  s.schiff = null;
+  s.schiff.sichtbar = false;
   s.bannerUhr = 0;
+  s.nochZuFallen = 0;
+  for (let i = 0; i < 5; i++) s.brocken.push(neuerBrocken(zufall(50, W - 50), zufall(0, H), 1 + (i % 3)));
+}
+
+function zumMenue() {
+  if (s.phase === 'lauf') merkeRekord();
+  menueHintergrund();
   hudStand = '';
   zeigeFenster('fStart');
 }
@@ -1049,41 +865,20 @@ function leuchtPunkt(c, x, y, r, farbe) {
   c.globalAlpha = 1; c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
 }
 
-// Was am Rand steht, wird auch auf der anderen Seite gezeichnet, damit nichts plötzlich springt
-function anAllenSeiten(o, r, male) {
-  const xs = [o.x], ys = [o.y];
-  if (o.x < r) xs.push(o.x + W); else if (o.x > W - r) xs.push(o.x - W);
-  if (o.y < r) ys.push(o.y + H); else if (o.y > H - r) ys.push(o.y - H);
-  for (const x of xs) for (const y of ys) male(x, y);
-}
-
-const SCHIFF_PFAD = new Path2D('M15 0 L-11 -10 L-6 0 L-11 10 Z');
-function zeichneSchiff(c, x, y, a, opt = {}) {
+// Das Dreieck zeigt immer nach oben
+const SCHIFF_PFAD = new Path2D('M0 -16 L13 12 L0 6 L-13 12 Z');
+function zeichneSchiff(c, x, y, opt = {}) {
   c.save();
   c.translate(x, y);
-  c.rotate(a);
-  if (opt.schub) {
-    const lang = 17 + Math.random() * 9;
-    const flamme = new Path2D('M-8 -5 L' + (-lang) + ' 0 L-8 5');
-    neon(c, flamme, F.flamme, 1.6);
-  }
+  if (opt.neigung) c.rotate(opt.neigung);
   neon(c, SCHIFF_PFAD, F.schiff, 2);
   if (opt.schutz) {
     c.globalAlpha = 0.35 + 0.25 * Math.sin(performance.now() / 90);
     c.strokeStyle = F.schiff;
     c.lineWidth = 1.2;
-    c.beginPath(); c.arc(0, 0, 22, 0, TAU); c.stroke();
+    c.beginPath(); c.arc(0, 0, 24, 0, TAU); c.stroke();
     c.globalAlpha = 1;
   }
-  c.restore();
-}
-
-const UFO_PFAD = new Path2D('M-22 0 L-9 -7 L9 -7 L22 0 L9 8 L-9 8 Z M-22 0 L22 0 M-9 -7 L-5 -13 L5 -13 L9 -7');
-function zeichneUfo(c, x, y, k) {
-  c.save();
-  c.translate(x, y);
-  c.scale(k, k);
-  neon(c, UFO_PFAD, F.ufo, 1.9 / Math.max(k, 0.75));
   c.restore();
 }
 
@@ -1112,7 +907,12 @@ function baueHintergrund() {
     c.fillStyle = r() < 0.15 ? '#9fdcff' : '#ffffff';
     c.beginPath(); c.arc(r() * W, r() * H, 0.5 + r() * 0.8, 0, TAU); c.fill();
   }
+  // Die Leiste unten, auf der das Schiff fährt
+  const y = H - ABSTAND_UNTEN + 20;
+  const leiste = new Path2D();
+  leiste.moveTo(10, y); leiste.lineTo(W - 10, y);
   c.globalAlpha = 1;
+  neon(c, leiste, '#0f8fa3', 1.4);
 }
 
 function zeichne() {
@@ -1122,26 +922,17 @@ function zeichne() {
   c.globalAlpha = 1;
   c.drawImage(hintergrund, 0, 0);
   let wx = 0, wy = 0;
-  if (s.wackeln > 0 && !wenigBewegung) { wx = (Math.random() - 0.5) * 8 * s.wackeln * 3; wy = (Math.random() - 0.5) * 8 * s.wackeln * 3; }
+  if (s.wackeln > 0 && !wenigBewegung) { wx = (Math.random() - 0.5) * 24 * s.wackeln; wy = (Math.random() - 0.5) * 24 * s.wackeln; }
   c.setTransform(massstab, 0, 0, massstab, wx * massstab, wy * massstab);
 
-  for (const b of s.brocken) anAllenSeiten(b, b.r + 8, (x, y) => zeichneBrocken(c, b, x, y));
-  if (s.ufo) anAllenSeiten(s.ufo, 30, (x, y) => zeichneUfo(c, x, y, UFOS[s.ufo.art].k));
-  for (const k of s.kugeln) leuchtPunkt(c, k.x, k.y, k.feind ? 2.2 : 2, k.feind ? F.ufoKugel : F.kugel);
+  for (const b of s.brocken) zeichneBrocken(c, b, b.x, b.y);
+  for (const k of s.kugeln) leuchtPunkt(c, k.x, k.y, 2.2, F.kugel);
 
   const sch = s.schiff;
-  if (sch && sch.weg <= 0) {
-    // Mit Schutz blinkt das Schiff, damit man sieht: Jetzt kann dir nichts passieren
+  if (sch.sichtbar) {
+    // Nach einem Treffer blinkt das Schiff: So lange kann dir nichts passieren
     const blinkt = sch.schutz > 0 && Math.floor(zeit * 8) % 2 === 0;
-    if (!blinkt || sch.schutz <= 0) {
-      anAllenSeiten(sch, 24, (x, y) => zeichneSchiff(c, x, y, sch.a, { schub: sch.schub && Math.random() > 0.15, schutz: sch.schutz > 0 }));
-    }
-  } else if (sch && sch.weg > 0) {
-    // Hyperraum: das Schiff taucht als Lichtpunkt wieder auf
-    const f = 1 - sch.weg / 0.45;
-    c.globalAlpha = f;
-    leuchtPunkt(c, sch.x, sch.y, 2 + f * 3, F.schiff);
-    c.globalAlpha = 1;
+    if (!blinkt) zeichneSchiff(c, sch.x, schiffY(), { schutz: sch.schutz > 0, neigung: sch.vx / SCHIFF_TEMPO * 0.18 });
   }
 
   for (const t of s.truemmer) {
@@ -1171,13 +962,12 @@ function zeichne() {
 
   // Ansage der neuen Welle
   if (s.bannerUhr > 0 && s.banner) {
-    const alpha = Math.min(1, s.bannerUhr * 1.5);
-    c.globalAlpha = alpha;
+    c.globalAlpha = Math.min(1, s.bannerUhr * 1.5);
     c.shadowColor = F.schiff;
     c.shadowBlur = 16 * massstab;
     schreibe(c, s.banner, W / 2, H / 2 - 60, F.schiff, 24, true);
     c.shadowBlur = 0;
-    if (s.welle === 1) schreibe(c, tippGeraet ? 'Links drehen, rechts Schub und Feuer' : 'Pfeile lenken, Leertaste schießt', W / 2, H / 2 + 62, '#cfe9f5', 15);
+    if (s.welle === 1) schreibe(c, tippGeraet ? 'Links fahren, rechts schießen' : 'Pfeile fahren, Leertaste schießt', W / 2, H / 2 - 10, '#cfe9f5', 15);
     c.globalAlpha = 1;
   }
 }
@@ -1196,21 +986,21 @@ function passeGroesseAn() {
   massstab = leinwand.width / W;
   // Alles bleibt an derselben Stelle im Verhältnis zum Feld
   if (s && (altW !== W || altH !== H)) {
-    const verschiebe = o => { if (o) { o.x = o.x / altW * W; o.y = o.y / altH * H; umlaufen(o); } };
-    [s.schiff, s.ufo, ...s.brocken, ...s.kugeln].forEach(verschiebe);
+    s.schiff.x = begrenzt(s.schiff.x / altW * W, 18, W - 18);
+    for (const o of [...s.brocken, ...s.kugeln]) { o.x = o.x / altW * W; o.y = o.y / altH * H; }
   }
   baueHintergrund();
 }
 
 let hudStand = '';
 function zeichneHud() {
-  const leben = s.phase === 'menue' ? STUFEN[daten.stufe].leben : Math.max(0, s.leben - (s.schiff ? 1 : 0));
+  const leben = s.phase === 'menue' ? STUFEN[daten.stufe].leben : Math.max(0, s.leben);
   const stand = s.punkte + '|' + s.welle + '|' + leben;
   if (stand === hudStand) return;
   hudStand = stand;
   $('punkte').textContent = zahl(s.punkte);
   $('welleAnzeige').textContent = Math.max(1, s.welle);
-  // Reserveschiffe als kleine Symbole
+  // Leben als kleine Schiffe
   const box = $('leben');
   box.textContent = '';
   for (let i = 0; i < Math.min(leben, 5); i++) {
@@ -1223,7 +1013,7 @@ function zeichneHud() {
   }
   if (leben > 5) box.appendChild(document.createTextNode('+' + (leben - 5)));
   if (leben === 0) box.textContent = '–';
-  box.setAttribute('aria-label', leben + ' Reserveschiffe');
+  box.setAttribute('aria-label', leben + ' Leben');
 }
 
 // --------------------------- Fenster ---------------------------
@@ -1272,6 +1062,7 @@ function baueStufen() {
   for (const t of document.querySelectorAll('.js-rekord')) t.textContent = zahl(daten.rekorde[daten.stufe]);
 }
 
+let startBrocken = null;
 function baueStart() {
   const d = offenesDuell;
   $('duell').hidden = !d;
@@ -1279,18 +1070,17 @@ function baueStart() {
     $('duellTitel').textContent = d.name + ' FORDERT DICH HERAUS';
     $('duellText').textContent = 'Schlage ' + zahl(d.punkte) + ' Punkte auf Stufe ' + STUFEN[d.stufe].name + '.';
   }
-  // Kleines Bild neben dem Titel: Schiff, Schuss und Brocken
+  // Kleines Bild neben dem Titel: Brocken oben, Schuss, Schiff unten
   const leinw = $('startBild');
   const c = leinw.getContext('2d');
   c.setTransform(1, 0, 0, 1, 0, 0);
   c.clearRect(0, 0, leinw.width, leinw.height);
   const k = leinw.width / 84;
   c.setTransform(k, 0, 0, k, 0, 0);
-  zeichneSchiff(c, 16, 40, -0.45);
-  leuchtPunkt(c, 37, 29, 1.6, F.kugel);
-  c.save(); c.translate(64, 24); c.scale(0.78, 0.78); zeichneBrocken(c, startBrocken, 0, 0); c.restore();
+  c.save(); c.translate(52, 20); c.scale(0.72, 0.72); zeichneBrocken(c, startBrocken, 0, 0); c.restore();
+  leuchtPunkt(c, 42, 38, 1.6, F.kugel);
+  c.save(); c.translate(42, 52); c.scale(0.7, 0.7); zeichneSchiff(c, 0, 0); c.restore();
 }
-let startBrocken = null;
 
 function baueListe() {
   const liste = $('liste');
@@ -1334,8 +1124,8 @@ function baueListe() {
 
 function baueHilfe() {
   $('hilfeSteuerung').textContent = tippGeraet
-    ? 'Linke Zone: Finger links dreht nach links, rechts nach rechts. Rechte Zone: links Schub, rechts Feuer. In der Mitte ist der Hyperraum.'
-    : 'Pfeil links und rechts drehen, Pfeil hoch gibt Schub, Leertaste schießt, Pfeil runter springt in den Hyperraum. P ist Pause, M schaltet den Ton.';
+    ? 'Linke Zone: Finger links fährt nach links, rechts nach rechts. Rechte Zone: Feuer. Gedrückt halten schießt immer weiter.'
+    : 'Pfeil links und rechts fahren, Leertaste oder Pfeil hoch schießt. Gedrückt halten schießt immer weiter. P ist Pause, M schaltet den Ton.';
 }
 
 // --------------------------- Freunde herausfordern ---------------------------
@@ -1444,13 +1234,11 @@ const gedrueckt = new Set();
 const TASTEN = {
   ArrowLeft: 'links', a: 'links', A: 'links',
   ArrowRight: 'rechts', d: 'rechts', D: 'rechts',
-  ArrowUp: 'schub', w: 'schub', W: 'schub',
-  ' ': 'feuer', Spacebar: 'feuer'
+  ' ': 'feuer', Spacebar: 'feuer', ArrowUp: 'feuer', w: 'feuer', W: 'feuer'
 };
-const HYPER_TASTEN = ['ArrowDown', 's', 'S', 'Shift'];
 
 function eingabeNeu() {
-  for (const teil of ['links', 'rechts', 'schub', 'feuer']) {
+  for (const teil of ['links', 'rechts', 'feuer']) {
     let an = false;
     for (const key of gedrueckt) if (TASTEN[key] === teil) an = true;
     for (const f of finger.values()) if (f.teil === teil) an = true;
@@ -1467,13 +1255,11 @@ function loslassen() {
 
 window.addEventListener('keydown', e => {
   if (e.target && e.target.tagName === 'INPUT') return;
-  const spielLaeuft = $('fenster').hidden && s.phase === 'lauf';
-  if (e.key in TASTEN || HYPER_TASTEN.includes(e.key)) {
+  if (e.key in TASTEN || e.key === 'ArrowDown') {
     if (!$('fenster').hidden) return;
     e.preventDefault();
-    if (!spielLaeuft) return;
+    if (s.phase !== 'lauf' || e.key === 'ArrowDown') return;
     ton.an();
-    if (HYPER_TASTEN.includes(e.key)) { if (!e.repeat) s.hyperWunsch = true; return; }
     if (TASTEN[e.key] === 'feuer' && !e.repeat) s.schussWunsch = true;
     gedrueckt.add(e.key);
     eingabeNeu();
@@ -1495,13 +1281,12 @@ window.addEventListener('keyup', e => {
 
 // --------------------------- Touch-Zonen ---------------------------
 
-// Jeder Finger zählt einzeln. Man kann in der Zone hin und her rutschen, ohne loszulassen.
+// Jeder Finger zählt einzeln. In der linken Zone kann man hin und her rutschen, ohne loszulassen.
 const finger = new Map();
 function teilUnter(zone, x) {
+  if (zone.id === 'zoneRechts') return 'feuer';
   const r = zone.getBoundingClientRect();
-  const linkeHaelfte = x < r.left + r.width / 2;
-  if (zone.id === 'zoneLinks') return linkeHaelfte ? 'links' : 'rechts';
-  return linkeHaelfte ? 'schub' : 'feuer';
+  return x < r.left + r.width / 2 ? 'links' : 'rechts';
 }
 for (const zone of document.querySelectorAll('.zone')) {
   zone.addEventListener('pointerdown', e => {
@@ -1518,7 +1303,6 @@ for (const zone of document.querySelectorAll('.zone')) {
     if (!f) return;
     const teil = teilUnter(f.zone, e.clientX);
     if (teil === f.teil) return;
-    if (teil === 'feuer' && s.phase === 'lauf') s.schussWunsch = true;
     f.teil = teil;
     eingabeNeu();
   });
@@ -1527,13 +1311,6 @@ for (const zone of document.querySelectorAll('.zone')) {
   zone.addEventListener('pointercancel', weg);
   zone.addEventListener('lostpointercapture', weg);
 }
-$('hyperKnopf').addEventListener('pointerdown', e => {
-  e.preventDefault();
-  ton.an();
-  if (s.phase === 'lauf') s.hyperWunsch = true;
-  $('hyperKnopf').classList.add('an');
-});
-for (const art of ['pointerup', 'pointercancel', 'pointerleave']) $('hyperKnopf').addEventListener(art, () => $('hyperKnopf').classList.remove('an'));
 // Kein Kontextmenü bei langem Drücken
 document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('#tasten, #bild')) e.preventDefault(); });
 
@@ -1554,14 +1331,13 @@ function bild(jetzt) {
   const dt = Math.min(1 / 30, (jetzt - letzteZeit) / 1000 || 0);
   letzteZeit = jetzt;
   const offen = !$('fenster').hidden;
-  // Im Menü und nach dem Spiel treiben die Brocken einfach weiter
+  // Im Menü und nach dem Spiel fallen die Brocken einfach weiter
   if (!offen || s.phase === 'aus' || s.phase === 'menue') {
+    if (s.phase === 'menue' && s.brocken.length < 5) s.brocken.push(neuerBrocken(zufall(50, W - 50), -50, 1 + Math.floor(Math.random() * 3)));
     // Kleine Schritte, damit schnelle Schüsse nicht durch kleine Brocken fliegen
     const teile = Math.ceil(dt / (1 / 120));
     for (let i = 0; i < teile; i++) rechne(dt / teile);
   }
-  const spielt = !offen && s.phase === 'lauf';
-  ton.dauer(spielt && s.schiff && s.schiff.schub, spielt && s.ufo ? s.ufo.art : '');
   zeichneHud();
   zeichne();
   requestAnimationFrame(bild);
@@ -1569,11 +1345,7 @@ function bild(jetzt) {
 
 leseHerausforderung();
 passeGroesseAn();
-// Im Hintergrund des Menüs schweben schon ein paar Brocken
-neuesSpiel();
-s.phase = 'menue';
-s.schiff = null;
-s.bannerUhr = 0;
+menueHintergrund();
 startBrocken = neuerBrocken(0, 0, 2);
 zeigeTon();
 zeigeFenster('fStart');
