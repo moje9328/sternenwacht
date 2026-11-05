@@ -1,7 +1,7 @@
 {
   "name": "Brocken-Jäger",
   "short_name": "Brocken-Jäger",
-  "description": "Felsbrocken fallen von oben: Weich aus und schieß sie klein.",
+  "description": "Feindliche Raumschiffe greifen an: Weich aus, dein Schiff schießt von allein.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
